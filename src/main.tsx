@@ -7,14 +7,23 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ChakraProvider } from "@chakra-ui/react";
 import queryClient from "./libs/query.ts";
 import theme from "./theme/index.ts";
+import { I18nextProvider } from "react-i18next";
+import { Provider } from "react-redux";
+import i18n from "./locales/index.ts";
+import { persistor, store } from "./store/store.ts";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <ChakraProvider theme={theme}>
-            <App />
+            <I18nextProvider i18n={i18n}>
+                <Provider store={store}>
+                    <PersistGate loading={null} persistor={persistor}>
+                        <App />
+                    </PersistGate>
+                </Provider>
+            </I18nextProvider>
         </ChakraProvider>
     </QueryClientProvider>
-    // <React.StrictMode>
-    // </React.StrictMode>,
 );

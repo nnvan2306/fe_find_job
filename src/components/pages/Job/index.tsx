@@ -1,12 +1,12 @@
 import { Box } from "@chakra-ui/react";
 import MainTemPlate from "../../templates/MainTemPlate";
 
-const ToDo = () => {
+const Job = () => {
     return (
         <MainTemPlate>
-            <Box>Todo</Box>
+            <Box>Job</Box>
         </MainTemPlate>
     );
 };
 
-export default ToDo;
+export default Job;

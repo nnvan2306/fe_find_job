@@ -1,10 +1,34 @@
-import { ToDo } from "./index";
+import { Home, Job, Login, Register, ToDo } from "./index";
 
 export const routes = [
     {
         name: "TODo",
-        path: "/",
+        path: "/todo",
         element: <ToDo />,
+        requiresAuth: false,
+    },
+    {
+        name: "Home",
+        path: "/",
+        element: <Home />,
+        requiresAuth: false,
+    },
+    {
+        name: "Login",
+        path: "/login",
+        element: <Login />,
+        requiresAuth: false,
+    },
+    {
+        name: "Regsiter",
+        path: "/register",
+        element: <Register />,
+        requiresAuth: false,
+    },
+    {
+        name: "Job",
+        path: "/job",
+        element: <Job />,
         requiresAuth: false,
     },
 ] as const;

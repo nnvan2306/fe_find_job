@@ -1,0 +1,37 @@
+{
+    "headers": {
+        "job": "Job",
+        "cvManage": "CV Manage",
+        "buttons": {
+            "login": "Login",
+            "register": "Register"
+        },
+        "popover": {
+            "profile": "Profile",
+            "manage": "Manage",
+            "logout": "Logout"
+        }
+    },
+    "profile": {
+        "title": "Personal Profile",
+        "fields": {
+            "fullName": "Full Name",
+            "userName": "Username",
+            "phoneNumber": "Phone Number",
+            "gender": "Gender",
+            "actions": {
+                "edit": "Edit Information",
+                "save": "Save",
+                "cancel": "Cancel"
+            }
+        }
+    },
+    "navbar": {
+        "user": "User Manage",
+        "exam": "Exam Manage",
+        "blog": "Blog Manage",
+        "chart": "Statistical",
+        "category": "Category Manage",
+        "vocabulary": "Vocabulary Manage"
+    }
+}

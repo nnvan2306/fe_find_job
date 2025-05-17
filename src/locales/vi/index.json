@@ -1,0 +1,37 @@
+{
+    "headers": {
+        "job": "Việc làm",
+        "cvManage": "Quản lý CV",
+        "buttons": {
+            "login": "Đăng nhập",
+            "register": "Đăng Ký"
+        },
+        "popover": {
+            "profile": "Hồ sơ cá nhân",
+            "manage": "Quản lý",
+            "logout": "Đăng xuất"
+        }
+    },
+    "profile": {
+        "title": "Hồ Sơ Cá Nhân",
+        "fields": {
+            "fullName": "Họ và tên",
+            "userName": "Tên đăng nhập",
+            "phoneNumber": "Số điện thoại",
+            "gender": "Giới tính",
+            "actions": {
+                "edit": "Chỉnh sửa thông tin",
+                "save": "Lưu",
+                "cancel": "Hủy"
+            }
+        }
+    },
+    "navbar": {
+        "user": "Quản lý người dùng",
+        "exam": "Quản lý bài kiểm tra",
+        "blog": "Quản lý blog",
+        "chart": "Thống kê",
+        "category": "Quản lý danh mục",
+        "vocabulary": "Quản lý từ vựng"
+    }
+}
