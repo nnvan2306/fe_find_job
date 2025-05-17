@@ -1,4 +1,4 @@
-import { Home, Job, Login, Register, ToDo } from "./index";
+import { Home, Job, JobDetail, Login, Register, ToDo } from "./index";
 
 export const routes = [
     {
@@ -29,6 +29,12 @@ export const routes = [
         name: "Job",
         path: "/job",
         element: <Job />,
+        requiresAuth: false,
+    },
+    {
+        name: "JobDetail",
+        path: "/job_detail/:id",
+        element: <JobDetail />,
         requiresAuth: false,
     },
 ] as const;
