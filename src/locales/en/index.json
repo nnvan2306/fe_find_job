@@ -26,7 +26,8 @@
         "postManage": "Job Post Manage",
         "cvApplyManage": "Cv Apply Manage",
         "categoryManage": "Category Manage",
-        "companyManage": "Company Manage"
+        "companyManage": "Company Manage",
+        "myCompany": "My Company"
     },
     "profile": {
         "title": "Personal Profile",

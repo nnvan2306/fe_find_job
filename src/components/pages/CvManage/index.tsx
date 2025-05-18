@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
     Box,
     Flex,
@@ -36,7 +36,7 @@ import icons from "../../../constants/icons";
 interface CVCardProps {
     title: string;
     isMain?: boolean;
-    lastUpdated: string;
+    file_url: string;
     onSetMain?: () => void;
     onDownload?: () => void;
     onDelete?: () => void;
@@ -47,7 +47,7 @@ interface CVCardProps {
 const CVCard: React.FC<CVCardProps> = ({
     title,
     isMain = false,
-    lastUpdated,
+    file_url,
     onSetMain,
     onDownload,
     onDelete,
@@ -105,9 +105,12 @@ const CVCard: React.FC<CVCardProps> = ({
                 </Flex>
             </CardHeader>
             <CardBody py={2}>
-                <Text fontSize="sm" color="gray.500">
-                    Cập nhật lần cuối {lastUpdated}
-                </Text>
+                <iframe
+                    src={file_url}
+                    width="100%"
+                    height="300px"
+                    style={{ border: "none" }}
+                />
             </CardBody>
             <CardFooter
                 bg={footerBg}
@@ -159,8 +162,9 @@ const CvManage: React.FC = () => {
             id: 1,
             user_id: 1,
             title: "Ngo Ngoc Van",
-            required_skills: "",
-            file_url: "react,nest,git",
+            required_skills: "react,nest,git",
+            file_url:
+                "https://www.topcv.vn/xem-cv/BQIDVgwHUlNRBgQIAV1TA14LV1YCClRUAVQFAw21c9",
             is_active: true,
             is_shared: false,
         },
@@ -168,8 +172,9 @@ const CvManage: React.FC = () => {
             id: 2,
             user_id: 1,
             title: "Ngo Ngoc Van two",
-            required_skills: "",
-            file_url: "node,next",
+            required_skills: "node,next",
+            file_url:
+                "https://www.topcv.vn/xem-cv/BQIDVgwHUlNRBgQIAV1TA14LV1YCClRUAVQFAw21c9",
             is_active: false,
             is_shared: false,
         },
@@ -179,6 +184,11 @@ const CvManage: React.FC = () => {
         setDataModal(null);
         onClose();
     };
+
+    const isShared = useMemo(
+        () => (data || []).some((item) => item.is_shared),
+        [data]
+    );
 
     return (
         <MainTemPlate>
@@ -232,9 +242,15 @@ const CvManage: React.FC = () => {
                                               <CVCard
                                                   key={item.id}
                                                   title={item.title}
+                                                  file_url={item.file_url}
                                                   isMain={item.is_active}
                                                   lastUpdated="06-05-2025 23:22 PM"
-                                                  onShow={() => {}}
+                                                  onShow={() => {
+                                                      window.open(
+                                                          item.file_url,
+                                                          "_blank"
+                                                      );
+                                                  }}
                                                   onEdit={() => {
                                                       setDataModal(item);
                                                       onOpen();
@@ -306,14 +322,14 @@ const CvManage: React.FC = () => {
                                             Trạng thái tìm việc đang bật
                                         </Text>
                                         <Switch
-                                            defaultChecked
+                                            isChecked={isShared}
                                             colorScheme="green"
                                             size="md"
                                         />
                                     </Flex>
                                     <Text fontSize="sm" color="gray.600">
                                         Trạng thái Bật tìm việc sẽ tự động tắt
-                                        sau 4 ngày.
+                                        sau 30 ngày.
                                     </Text>
                                     <Text fontSize="sm" color="gray.600">
                                         Nếu bạn vẫn còn nhu cầu tìm việc, hãy{" "}

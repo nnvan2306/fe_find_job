@@ -38,6 +38,11 @@ const Navbar: React.FC<NavbarProps> = (props) => {
 
     const LinkItems: Array<LinkItemProps> = [
         {
+            name: t("navbar.myCompany"),
+            icon: icons.users,
+            href: routesMap.MyCompany,
+        },
+        {
             name: t("navbar.user"),
             icon: icons.users,
             href: routesMap.UserManage,

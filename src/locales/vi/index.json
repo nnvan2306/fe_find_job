@@ -26,7 +26,8 @@
         "postManage": "Quản lý tin tuyển dụng",
         "cvApplyManage": "Quản lý Cv ứng tuyển",
         "categoryManage": "Quản lý danh mục",
-        "companyManage": "Quản lý công ty"
+        "companyManage": "Quản lý công ty",
+        "myCompany": "Công ty của tôi"
     },
     "profile": {
         "title": "Hồ Sơ Cá Nhân",

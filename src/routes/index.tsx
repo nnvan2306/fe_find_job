@@ -10,7 +10,7 @@ export const CompanyDetail = lazy(
     () => import("../components/pages/CompanyDetail")
 );
 export const Profile = lazy(() => import("../components/pages/Profile"));
-export const CompanyNew = lazy(() => import("../components/pages/CompanyNew"));
+export const MyCompany = lazy(() => import("../components/pages/MyCompany"));
 export const UserManage = lazy(() => import("../components/pages/UserManage"));
 export const Chart = lazy(() => import("../components/pages/Chart"));
 export const PostManage = lazy(() => import("../components/pages/PostManage"));

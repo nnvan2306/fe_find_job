@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     Box,
-    Button,
     Card,
     CardBody,
     CardHeader,
@@ -13,14 +12,13 @@ import {
     Tag,
     TagLabel,
     Text,
-    useToast,
     IconButton,
     InputGroup,
     InputRightElement,
-    Select,
 } from "@chakra-ui/react";
-import { FiSearch, FiDownload, FiEye, FiFilter } from "react-icons/fi";
+import { FiSearch, FiDownload, FiEye } from "react-icons/fi";
 import MainTemPlate from "../../templates/MainTemPlate";
+import { useSearchParams } from "react-router-dom";
 
 interface CV {
     id: number;
@@ -33,15 +31,14 @@ interface CV {
 }
 
 const FindCv = () => {
-    const toast = useToast();
-
     const mockCVs: CV[] = [
         {
             id: 1,
             user_id: 101,
             title: "Senior React Developer",
             required_skills: "React, TypeScript, Node.js, Redux",
-            file_url: "/sample-cv-1.pdf",
+            file_url:
+                "https://www.topcv.vn/xem-cv/BQIDVgwHUlNRBgQIAV1TA14LV1YCClRUAVQFAw21c9",
             is_active: true,
             is_shared: true,
         },
@@ -83,60 +80,67 @@ const FindCv = () => {
         },
     ];
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [textSearch, setTextSearch] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const text = useMemo(() => searchParams.get("search"), [searchParams]);
 
-    const handleDownload = (cv: CV) => {
-        toast({
-            title: "Downloading CV",
-            description: `Downloading ${cv.title} CV...`,
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-        });
+    const handleSearch = () => {
+        setSearchParams({ search: textSearch });
+    };
+
+    const handleDownload = async (cv: CV) => {
+        try {
+            const response = await fetch(cv.file_url, {
+                mode: "cors",
+            });
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "cv.pdf";
+            link.click();
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Tải file thất bại:", error);
+        }
     };
 
     const handleView = (cv: CV) => {
-        toast({
-            title: "Viewing CV",
-            description: `Opening ${cv.title} CV...`,
-            status: "info",
-            duration: 3000,
-            isClosable: true,
-        });
+        window.open(cv.file_url, "_blank");
     };
+    useEffect(() => {
+        if (text) {
+            setTextSearch(text);
+        }
+    }, [text]);
 
     return (
         <MainTemPlate>
             <Container maxW="container.xl" py={8}>
                 <Heading mb={6}>CV Search</Heading>
 
-                {/* Search and Filter Bar */}
                 <Flex mb={6} direction={{ base: "column", md: "row" }} gap={4}>
-                    <InputGroup size="md" flex={1}>
+                    <InputGroup size="md" flex={1} overflow="hidden">
                         <Input
                             placeholder="Search by title or skills..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            value={textSearch}
+                            onChange={(e) => setTextSearch(e.target.value)}
                             pr="4.5rem"
                         />
-                        <InputRightElement width="4.5rem">
+                        <InputRightElement
+                            width="4.5rem"
+                            cursor="pointer"
+                            bg="green.400"
+                            color="white"
+                            roundedRight={5}
+                            onClick={() => handleSearch()}
+                        >
                             <FiSearch size={20} />
                         </InputRightElement>
                     </InputGroup>
-
-                    <Select w="400px"></Select>
-
-                    <Button
-                        leftIcon={<FiFilter size={16} />}
-                        colorScheme={isFilterOpen ? "blue" : "gray"}
-                        onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    >
-                        Filters
-                    </Button>
                 </Flex>
 
-                {/* CV List */}
                 <Stack spacing={4}>
                     {mockCVs.length > 0 ? (
                         mockCVs.map((cv) => (
