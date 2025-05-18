@@ -3,6 +3,7 @@ import {
     Chart,
     Companies,
     CompanyDetail,
+    CompanyManage,
     CompanyNew,
     CvApplyManage,
     CvManage,
@@ -112,6 +113,12 @@ export const routes = [
         name: "CategoryManage",
         path: "/manage/categoy",
         element: <CategoryManage />,
+        requiresAuth: false,
+    },
+    {
+        name: "CompanyManage",
+        path: "/manage/company",
+        element: <CompanyManage />,
         requiresAuth: false,
     },
 ] as const;

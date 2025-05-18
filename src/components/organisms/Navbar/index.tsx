@@ -43,6 +43,11 @@ const Navbar: React.FC<NavbarProps> = (props) => {
             href: routesMap.UserManage,
         },
         {
+            name: t("navbar.companyManage"),
+            icon: icons.chart,
+            href: routesMap.CompanyManage,
+        },
+        {
             name: t("navbar.postManage"),
             icon: icons.chart,
             href: routesMap.PostManage,

@@ -22,3 +22,6 @@ export const Companies = lazy(() => import("../components/pages/Companies"));
 export const CategoryManage = lazy(
     () => import("../components/pages/CategoryManage")
 );
+export const CompanyManage = lazy(
+    () => import("../components/pages/CompanyManage")
+);
