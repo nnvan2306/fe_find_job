@@ -13,6 +13,7 @@ import {
     HStack,
     Grid,
     GridItem,
+    Image,
 } from "@chakra-ui/react";
 import {
     FaBriefcase,
@@ -50,9 +51,11 @@ const JobDetail: React.FC = () => {
         company_id: 24,
         company: {
             name: "Chi Nhánh Miền Bắc - Công ty Cổ Phần Phát Triển Đầu Tư Xây Dựng",
-            logo_url: "/api/placeholder/80/80",
+            logo_url:
+                "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
             location:
                 "Thôn Viên Nội, Xã Vân Nội, Huyện Đông Anh, Thành phố Hà Nội",
+            website: "https://fstack.io.vn/",
         },
         recruiter_id: 12,
         title: "Kế Toán Tổng Hợp (Định Hướng Lên Kế Toán Trưởng/ Kế Toán Phó)",
@@ -146,7 +149,11 @@ const JobDetail: React.FC = () => {
                                 <Heading as="h3" size="md" mb={4}>
                                     Mô tả công việc
                                 </Heading>
-                                <Box>{jobData.description}</Box>
+                                <Box
+                                    dangerouslySetInnerHTML={{
+                                        __html: jobData.description,
+                                    }}
+                                ></Box>
                             </Box>
 
                             {/* Apply Button */}
@@ -177,10 +184,11 @@ const JobDetail: React.FC = () => {
                                     Thông tin công ty
                                 </Heading>
                                 <HStack>
-                                    <Box boxSize="80px">
-                                        <img
+                                    <Box>
+                                        <Image
                                             src={jobData.company.logo_url}
                                             alt="Company Logo"
+                                            w="100px"
                                             style={{ borderRadius: "8px" }}
                                         />
                                     </Box>
@@ -193,7 +201,7 @@ const JobDetail: React.FC = () => {
 
                                 <Box width="100%">
                                     <Divider my={2} />
-                                    <HStack align="flex-start" py={2}>
+                                    <HStack align="flex-start" py={2} gap={0}>
                                         <Text color={mutedColor}>Địa chỉ:</Text>
                                         <Text
                                             fontWeight="medium"
@@ -202,12 +210,11 @@ const JobDetail: React.FC = () => {
                                             {jobData.company.location}
                                         </Text>
                                     </HStack>
-                                    <Divider my={2} />
                                 </Box>
 
                                 <Box width="100%">
                                     <Divider my={2} />
-                                    <HStack align="flex-start" py={2}>
+                                    <HStack py={2} align="flex-start">
                                         <Text color={mutedColor}>
                                             Chi tiết:
                                         </Text>
@@ -263,123 +270,6 @@ const JobDetail: React.FC = () => {
                         </Box>
                     </GridItem>
                 </Grid>
-
-                {/* <Box mt={12}>
-                    <Heading as="h2" size="lg" mb={6}>
-                        Gợi ý việc làm phù hợp
-                    </Heading>
-
-                    <Grid
-                        templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
-                        gap={6}
-                    >
-                        <Box
-                            p={4}
-                            borderRadius="lg"
-                            boxShadow="md"
-                            border="1px"
-                            borderColor={borderColor}
-                            bg={bgColor}
-                            position="relative"
-                        >
-                            <Badge
-                                colorScheme="green"
-                                position="absolute"
-                                top={4}
-                                right={4}
-                            >
-                                Phù hợp
-                            </Badge>
-
-                            <Flex mb={4}>
-                                <Box mr={4}>
-                                    <img
-                                        src="/api/placeholder/60/60"
-                                        alt="Company Logo"
-                                        style={{ borderRadius: "8px" }}
-                                    />
-                                </Box>
-                                <Box>
-                                    <Heading as="h3" size="md" mb={1}>
-                                        Developer 3 Năm Kinh Nghiệm
-                                    </Heading>
-                                    <Text color={mutedColor}>
-                                        Công ty cổ phần công nghệ HDT Việt Nam
-                                    </Text>
-                                </Box>
-                            </Flex>
-
-                            <HStack spacing={4} mb={4} wrap="wrap">
-                                <Badge colorScheme="blue">Thỏa thuận</Badge>
-                                <Flex align="center">
-                                    <Icon
-                                        as={FaMapMarkerAlt}
-                                        color="red.500"
-                                        mr={1}
-                                    />
-                                    <Text fontSize="sm">Hà Nội</Text>
-                                </Flex>
-                            </HStack>
-
-                            <Button
-                                size="sm"
-                                colorScheme="green"
-                                variant="outline"
-                                mt={2}
-                            >
-                                Xem chi tiết
-                            </Button>
-                        </Box>
-
-                        <Box
-                            p={4}
-                            borderRadius="lg"
-                            boxShadow="md"
-                            border="1px"
-                            borderColor={borderColor}
-                            bg={bgColor}
-                        >
-                            <Flex mb={4}>
-                                <Box mr={4}>
-                                    <img
-                                        src="/api/placeholder/60/60"
-                                        alt="Company Logo"
-                                        style={{ borderRadius: "8px" }}
-                                    />
-                                </Box>
-                                <Box>
-                                    <Heading as="h3" size="md" mb={1}>
-                                        ReactJS Developer
-                                    </Heading>
-                                    <Text color={mutedColor}>
-                                        Công ty TNHH TechHub Việt Nam
-                                    </Text>
-                                </Box>
-                            </Flex>
-
-                            <HStack spacing={4} mb={4} wrap="wrap">
-                                <Badge colorScheme="blue">Thỏa thuận</Badge>
-                                <Flex align="center">
-                                    <Icon
-                                        as={FaMapMarkerAlt}
-                                        color="red.500"
-                                        mr={1}
-                                    />
-                                    <Text fontSize="sm">Hà Nội</Text>
-                                </Flex>
-                            </HStack>
-
-                            <Button
-                                size="sm"
-                                colorScheme="green"
-                                variant="outline"
-                                mt={2}
-                            >
-                                Xem chi tiết
-                            </Button>
-                        </Box>
-                    </Grid>
-                </Box> */}
             </Container>
         </MainTemPlate>
     );

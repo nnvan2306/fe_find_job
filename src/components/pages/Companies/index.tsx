@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Box,
     Container,
@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import { CompanyResponseType } from "../../../types/company";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { routesMap } from "../../../routes/routes";
 import MainTemPlate from "../../templates/MainTemPlate";
 
@@ -68,46 +68,61 @@ const CompanyCard = ({ company }: { company: CompanyResponseType }) => {
     );
 };
 
+const featuredCompanies = [
+    {
+        id: 1,
+        name: "CÔNG TY CỔ PHẦN CÔNG NGHỆ & SÁNG TẠO TRẺ TEKY HOLDINGS",
+        description:
+            "Young can do ITTEKY là Tổ chức giáo dục công nghệ STEAM K12 chuẩn Mỹ tiên phong và dẫn đầu tại Việt Nam với hệ sinh thái Học viện - Nền tảng edtech...",
+        logo_url:
+            "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
+    },
+    {
+        id: 2,
+        name: "TRUNG TÂM DỊCH VỤ SỐ MOBIFONE - CHI NHÁNH TỔNG CÔNG TY VIỄN THÔNG MOBIFONE",
+        description:
+            "Trung tâm Dịch vụ sốMobiFone là đơn vị trực thuộc Tổng Công ty Viễn thông MobiFone với chức năng phát triển và kinh doanh các dịch vụ giá trị gia tăng...",
+        logo_url:
+            "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
+    },
+    {
+        id: 3,
+        name: "VUIHOC.VN",
+        description:
+            'VUIHOC là trường học trực tuyến cho học sinh từ lớp 1 đến lớp 12 với sứ mệnh "đem cơ hội tiếp cận bình đẳng các chương trình giáo dục chất lượng cao, chi phí hợp lý tới học sinh trên mọi miền tổ quốc"...',
+        logo_url:
+            "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
+    },
+];
+
 const Companies: React.FC = () => {
     const bgColor = useColorModeValue("gray.50", "gray.900");
     const headingColor = useColorModeValue("green.600", "green.300");
 
-    const featuredCompanies = [
-        {
-            id: 1,
-            name: "CÔNG TY CỔ PHẦN CÔNG NGHỆ & SÁNG TẠO TRẺ TEKY HOLDINGS",
-            description:
-                "Young can do ITTEKY là Tổ chức giáo dục công nghệ STEAM K12 chuẩn Mỹ tiên phong và dẫn đầu tại Việt Nam với hệ sinh thái Học viện - Nền tảng edtech...",
-            logo_url:
-                "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-        },
-        {
-            id: 2,
-            name: "TRUNG TÂM DỊCH VỤ SỐ MOBIFONE - CHI NHÁNH TỔNG CÔNG TY VIỄN THÔNG MOBIFONE",
-            description:
-                "Trung tâm Dịch vụ sốMobiFone là đơn vị trực thuộc Tổng Công ty Viễn thông MobiFone với chức năng phát triển và kinh doanh các dịch vụ giá trị gia tăng...",
-            logo_url:
-                "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-        },
-        {
-            id: 3,
-            name: "VUIHOC.VN",
-            description:
-                'VUIHOC là trường học trực tuyến cho học sinh từ lớp 1 đến lớp 12 với sứ mệnh "đem cơ hội tiếp cận bình đẳng các chương trình giáo dục chất lượng cao, chi phí hợp lý tới học sinh trên mọi miền tổ quốc"...',
-            logo_url:
-                "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-        },
-    ];
+    const [textSearch, setTextSearch] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const text = useMemo(() => searchParams.get("search"), [searchParams]);
+
+    const handleSearch = () => {
+        setSearchParams({ search: textSearch });
+    };
+
+    useEffect(() => {
+        if (text) {
+            setTextSearch(text);
+        }
+    }, [text]);
 
     return (
         <MainTemPlate>
             <Box bg={bgColor} minH="100vh" w="100%" py={4}>
-                {/* Hero Section */}
-                <Container maxW="container.xl" pb={16}>
+                <Container maxW={{ base: "container.xl", lg: "100%" }} pb={16}>
                     <Flex
                         direction={{ base: "column", md: "row" }}
                         align="center"
                         justify="space-between"
+                        bgGradient="linear(to-b, #d7fbe8, #ffffff)"
+                        px={{ base: "16px", lg: "120px" }}
                     >
                         <Box
                             maxW={{ base: "100%", md: "50%" }}
@@ -126,24 +141,32 @@ const Companies: React.FC = () => {
                                 việc tốt nhất dành cho bạn
                             </Text>
 
-                            {/* Search Box */}
-                            <Flex>
-                                <InputGroup size="lg" maxW="md">
+                            <Flex
+                                mb={6}
+                                direction={{ base: "column", md: "row" }}
+                                w="100%"
+                            >
+                                <InputGroup size="lg">
                                     <InputLeftElement pointerEvents="none">
                                         <FiSearch color="gray.300" />
                                     </InputLeftElement>
                                     <Input
-                                        placeholder="Nhập tên công ty"
+                                        placeholder="Search by title or skills..."
                                         bg="white"
                                         borderRadius="md"
                                         borderRight="none"
                                         borderRightRadius="none"
+                                        value={textSearch}
+                                        onChange={(e) =>
+                                            setTextSearch(e.target.value)
+                                        }
                                     />
                                 </InputGroup>
                                 <Button
                                     colorScheme="green"
                                     size="lg"
                                     borderLeftRadius="none"
+                                    onClick={() => handleSearch()}
                                 >
                                     Tìm kiếm
                                 </Button>
@@ -152,7 +175,8 @@ const Companies: React.FC = () => {
 
                         <Box maxW={{ base: "80%", md: "45%" }}>
                             <Image
-                                src="https://via.placeholder.com/600/4CAF50/FFFFFF?text=Job+Search"
+                                w="200px"
+                                src="https://static.topcv.vn/v4/image/brand-identity/company-billBoard.png?v=1.0.0"
                                 alt="Job Search Illustration"
                             />
                         </Box>

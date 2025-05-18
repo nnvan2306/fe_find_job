@@ -14,7 +14,8 @@ import {
     Text,
     IconButton,
     InputGroup,
-    InputRightElement,
+    InputLeftElement,
+    Button,
 } from "@chakra-ui/react";
 import { FiSearch, FiDownload, FiEye } from "react-icons/fi";
 import MainTemPlate from "../../templates/MainTemPlate";
@@ -120,25 +121,29 @@ const FindCv = () => {
             <Container maxW="container.xl" py={8}>
                 <Heading mb={6}>CV Search</Heading>
 
-                <Flex mb={6} direction={{ base: "column", md: "row" }} gap={4}>
-                    <InputGroup size="md" flex={1} overflow="hidden">
+                <Flex mb={6} direction={{ base: "column", md: "row" }} w="100%">
+                    <InputGroup size="lg">
+                        <InputLeftElement pointerEvents="none">
+                            <FiSearch color="gray.300" />
+                        </InputLeftElement>
                         <Input
                             placeholder="Search by title or skills..."
+                            bg="white"
+                            borderRadius="md"
+                            borderRight="none"
+                            borderRightRadius="none"
                             value={textSearch}
                             onChange={(e) => setTextSearch(e.target.value)}
-                            pr="4.5rem"
                         />
-                        <InputRightElement
-                            width="4.5rem"
-                            cursor="pointer"
-                            bg="green.400"
-                            color="white"
-                            roundedRight={5}
-                            onClick={() => handleSearch()}
-                        >
-                            <FiSearch size={20} />
-                        </InputRightElement>
                     </InputGroup>
+                    <Button
+                        colorScheme="green"
+                        size="lg"
+                        borderLeftRadius="none"
+                        onClick={() => handleSearch()}
+                    >
+                        Tìm kiếm
+                    </Button>
                 </Flex>
 
                 <Stack spacing={4}>
