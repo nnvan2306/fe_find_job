@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react";
 import {
     Box,
     Flex,
@@ -8,55 +8,15 @@ import {
     InputGroup,
     InputLeftElement,
     Icon,
-    VStack,
     HStack,
     Container,
-    Checkbox,
-    Tag,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    AccordionItem,
-    Accordion,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
+    Select,
 } from "@chakra-ui/react";
-import { FiChevronDown, FiSearch, FiCheck, FiFilter } from "react-icons/fi";
+import { FiSearch, FiCheck, FiFilter } from "react-icons/fi";
 import MainTemPlate from "../../templates/MainTemPlate";
 
 import JobCard from "../../organisms/JobCard";
-
-const FilterAccordion: React.FC<{
-    title: string;
-    children: React.ReactNode;
-    count?: number;
-}> = ({ title, children, count }) => {
-    return (
-        <AccordionItem border="none">
-            <AccordionButton px={0} py={2}>
-                <Box flex="1" textAlign="left" fontWeight="medium">
-                    {title}
-                    {count && (
-                        <Tag
-                            size="sm"
-                            ml={2}
-                            colorScheme="gray"
-                            variant="subtle"
-                        >
-                            {count}
-                        </Tag>
-                    )}
-                </Box>
-                <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel px={0} py={2}>
-                {children}
-            </AccordionPanel>
-        </AccordionItem>
-    );
-};
+import { useGetCategoris } from "../../../services/category/get-all";
 
 const Home = () => {
     const jobs = [
@@ -92,40 +52,21 @@ const Home = () => {
         },
     ];
 
+    const { data } = useGetCategoris({});
+    const categories = useMemo(
+        () =>
+            (data?.data || []).map((item) => ({
+                ...item,
+            })),
+        [data]
+    );
+
     return (
         <MainTemPlate>
             <Box w="100%">
                 <Box bg="green.600" py={5} px={4} w="100%">
                     <Container maxW="container.xl" w="100%">
                         <Flex gap={2} flexWrap={{ base: "wrap", md: "nowrap" }}>
-                            <Box
-                                position="relative"
-                                flex={{ base: "1 0 100%", md: 1 }}
-                            >
-                                <Menu>
-                                    <MenuButton
-                                        as={Button}
-                                        leftIcon={<FiChevronDown />}
-                                        variant="outline"
-                                        bg="white"
-                                        w="full"
-                                        textAlign="left"
-                                        justifyContent="flex-start"
-                                    >
-                                        Danh mục Nghề
-                                    </MenuButton>
-                                    <MenuList>
-                                        <MenuItem>IT - Phần mềm</MenuItem>
-                                        <MenuItem>Marketing</MenuItem>
-                                        <MenuItem>Kế toán</MenuItem>
-                                        <MenuItem>
-                                            Bán lẻ/Dịch vụ tiêu dùng
-                                        </MenuItem>
-                                        <MenuItem>Chăm sóc khách hàng</MenuItem>
-                                    </MenuList>
-                                </Menu>
-                            </Box>
-
                             <InputGroup flex={{ base: "1 0 100%", md: 2 }}>
                                 <InputLeftElement pointerEvents="none">
                                     <FiSearch color="gray.400" />
@@ -136,7 +77,7 @@ const Home = () => {
                                 />
                             </InputGroup>
 
-                            <Box
+                            {/* <Box
                                 position="relative"
                                 flex={{ base: "1 0 100%", md: 1 }}
                             >
@@ -158,7 +99,7 @@ const Home = () => {
                                         <MenuItem>Đà Nẵng</MenuItem>
                                     </MenuList>
                                 </Menu>
-                            </Box>
+                            </Box> */}
 
                             <Button
                                 colorScheme="green"
@@ -178,7 +119,7 @@ const Home = () => {
                     >
                         <Box
                             as="nav"
-                            width={{ base: "100%", md: "250px" }}
+                            width={{ base: "100%", md: "300px" }}
                             pr={{ md: 6 }}
                             mb={{ base: 4, md: 0 }}
                         >
@@ -202,50 +143,17 @@ const Home = () => {
                                 </Flex>
                             </Box>
 
-                            <Accordion allowMultiple defaultIndex={[0, 1]}>
-                                <FilterAccordion title="Theo danh mục nghề">
-                                    <VStack align="start" spacing={1}>
-                                        <Checkbox>
-                                            Marketing{" "}
-                                            <Text as="span" color="gray.500">
-                                                (4267)
-                                            </Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            Kế toán{" "}
-                                            <Text as="span" color="gray.500">
-                                                (3781)
-                                            </Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            Sales Bán lẻ/Dịch vụ tiêu dùng{" "}
-                                            <Text as="span" color="gray.500">
-                                                (1778)
-                                            </Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            Chăm sóc khách hàng{" "}
-                                            <Text as="span" color="gray.500">
-                                                (1526)
-                                            </Text>
-                                        </Checkbox>
-                                        <Checkbox>
-                                            Nhân sự{" "}
-                                            <Text as="span" color="gray.500">
-                                                (1439)
-                                            </Text>
-                                        </Checkbox>
-                                        <Button
-                                            variant="link"
-                                            colorScheme="green"
-                                            size="sm"
-                                            mt={2}
-                                        >
-                                            Xem thêm
-                                        </Button>
-                                    </VStack>
-                                </FilterAccordion>
-                            </Accordion>
+                            <Select placeholder="Chọn Danh mục">
+                                {categories?.length
+                                    ? categories.map((item) => {
+                                          return (
+                                              <option key={item.id}>
+                                                  {item?.name}
+                                              </option>
+                                          );
+                                      })
+                                    : null}
+                            </Select>
                         </Box>
 
                         <Box flex="1">
