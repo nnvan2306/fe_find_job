@@ -91,7 +91,6 @@ const Header = () => {
                 bg={bgColor}
                 boxShadow="sm"
             >
-                {/* Logo + Icon mobile */}
                 <Flex align="center">
                     <IconButton
                         display={{ base: "inline-flex", md: "none" }}
@@ -113,7 +112,6 @@ const Header = () => {
                     </Text>
                 </Flex>
 
-                {/* Menu trung tâm */}
                 <HStack
                     spacing={6}
                     display={{ base: "none", md: "flex" }}
@@ -123,7 +121,6 @@ const Header = () => {
                     {renderNavItems()}
                 </HStack>
 
-                {/* Login / Avatar + Ngôn ngữ */}
                 <HStack spacing={3}>
                     {!user ? (
                         <>
@@ -236,6 +233,11 @@ const Header = () => {
                                                 py={3}
                                                 borderRadius={0}
                                                 _hover={{ bg: itemHoverBg }}
+                                                onClick={() =>
+                                                    navigate(
+                                                        routesMap.UserManage
+                                                    )
+                                                }
                                             >
                                                 {t("headers.popover.manage")}
                                             </Button>

@@ -171,7 +171,7 @@ const CategoryManage = () => {
 
                 <TableCommon
                     columns={[
-                        { key: "title", label: "title", w: "50%" },
+                        { key: "name", label: "Name", w: "50%" },
 
                         {
                             key: "action",

@@ -49,7 +49,7 @@ const Login = () => {
                     title: "Đăng nhập thành công",
                 });
                 setIsLoading(false);
-                // navigate(routesMap.Home);
+                navigate(routesMap.Home);
             },
             onError(error) {
                 toast({
