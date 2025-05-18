@@ -28,10 +28,18 @@
     },
     "navbar": {
         "user": "User Manage",
-        "exam": "Exam Manage",
-        "blog": "Blog Manage",
         "chart": "Statistical",
         "category": "Category Manage",
-        "vocabulary": "Vocabulary Manage"
+        "postManage": "Job Post Manage",
+        "cvApplyManage": "Cv Apply Manage"
+    },
+    "userManage": {
+        "title": "User Manage"
+    },
+    "chart": {
+        "title": "Statistical"
+    },
+    "postManage": {
+        "title": "Job Post Manage"
     }
 }

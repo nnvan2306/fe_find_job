@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import i18n from "./locales/index.ts";
 import { persistor, store } from "./store/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
+import "react-markdown-editor-lite/lib/index.css";
 
 createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>

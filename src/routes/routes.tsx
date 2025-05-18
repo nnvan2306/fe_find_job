@@ -1,4 +1,18 @@
-import { Home, Job, JobDetail, Login, Register, ToDo } from "./index";
+import {
+    Chart,
+    CompanyDetail,
+    CompanyNew,
+    CvApplyManage,
+    CvManage,
+    Home,
+    JobDetail,
+    Login,
+    PostManage,
+    Profile,
+    Register,
+    ToDo,
+    UserManage,
+} from "./index";
 
 export const routes = [
     {
@@ -26,15 +40,57 @@ export const routes = [
         requiresAuth: false,
     },
     {
-        name: "Job",
-        path: "/job",
-        element: <Job />,
+        name: "CvManage",
+        path: "/cv_manage",
+        element: <CvManage />,
         requiresAuth: false,
     },
     {
         name: "JobDetail",
         path: "/job_detail/:id",
         element: <JobDetail />,
+        requiresAuth: false,
+    },
+    {
+        name: "CompanyDetail",
+        path: "/company_detail/:id",
+        element: <CompanyDetail />,
+        requiresAuth: false,
+    },
+    {
+        name: "Profile",
+        path: "/profile",
+        element: <Profile />,
+        requiresAuth: false,
+    },
+    {
+        name: "CompanyNew",
+        path: "/company/new",
+        element: <CompanyNew />,
+        requiresAuth: false,
+    },
+    {
+        name: "UserManage",
+        path: "/user",
+        element: <UserManage />,
+        requiresAuth: false,
+    },
+    {
+        name: "Chart",
+        path: "/chart",
+        element: <Chart />,
+        requiresAuth: false,
+    },
+    {
+        name: "PostManage",
+        path: "/post",
+        element: <PostManage />,
+        requiresAuth: false,
+    },
+    {
+        name: "CvApplyManage",
+        path: "/cv_apply",
+        element: <CvApplyManage />,
         requiresAuth: false,
     },
 ] as const;

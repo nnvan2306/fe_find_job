@@ -28,10 +28,18 @@
     },
     "navbar": {
         "user": "Quản lý người dùng",
-        "exam": "Quản lý bài kiểm tra",
-        "blog": "Quản lý blog",
         "chart": "Thống kê",
         "category": "Quản lý danh mục",
-        "vocabulary": "Quản lý từ vựng"
+        "postManage": "Quản lý tin tuyển dụng",
+        "cvApplyManage": "Quản lý Cv ứng tuyển"
+    },
+    "userManage": {
+        "title": "Quản lý người dùng"
+    },
+    "chart": {
+        "title": "Thống kê"
+    },
+    "postManage": {
+        "title": "Quản lý tin tuyển dụng"
     }
 }

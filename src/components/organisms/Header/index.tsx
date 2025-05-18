@@ -104,9 +104,11 @@ const Header = () => {
                     _hover={{ color: greenColor }}
                     cursor="pointer"
                     textTransform="uppercase"
-                    borderBottom={isActive(routesMap.Job) ? "2px solid" : ""}
+                    borderBottom={
+                        isActive(routesMap.CvManage) ? "2px solid" : ""
+                    }
                     borderColor={greenColor}
-                    onClick={() => navigate(routesMap.Job)}
+                    onClick={() => navigate(routesMap.CvManage)}
                 >
                     {t("headers.cvManage")}
                 </Text>

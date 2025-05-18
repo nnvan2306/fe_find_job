@@ -17,10 +17,8 @@ import {
 import {
     FaBriefcase,
     FaMapMarkerAlt,
-    FaCalendarAlt,
     FaMoneyBillWave,
     FaUser,
-    FaBuilding,
 } from "react-icons/fa";
 import MainTemPlate from "../../templates/MainTemPlate";
 import { CompanyResponseType } from "../../../types/company";
