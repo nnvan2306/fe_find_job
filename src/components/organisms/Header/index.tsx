@@ -112,6 +112,36 @@ const Header = () => {
                 >
                     {t("headers.cvManage")}
                 </Text>
+                <Text
+                    px={2}
+                    py={1}
+                    fontWeight="medium"
+                    color="gray.600"
+                    _hover={{ color: greenColor }}
+                    cursor="pointer"
+                    textTransform="uppercase"
+                    borderBottom={isActive(routesMap.FindCv) ? "2px solid" : ""}
+                    borderColor={greenColor}
+                    onClick={() => navigate(routesMap.FindCv)}
+                >
+                    {t("headers.findCv")}
+                </Text>
+                <Text
+                    px={2}
+                    py={1}
+                    fontWeight="medium"
+                    color="gray.600"
+                    _hover={{ color: greenColor }}
+                    cursor="pointer"
+                    textTransform="uppercase"
+                    borderBottom={
+                        isActive(routesMap.Companies) ? "2px solid" : ""
+                    }
+                    borderColor={greenColor}
+                    onClick={() => navigate(routesMap.Companies)}
+                >
+                    {t("headers.companies")}
+                </Text>
             </HStack>
 
             <HStack spacing={3}>

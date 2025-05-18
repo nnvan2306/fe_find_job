@@ -17,3 +17,8 @@ export const PostManage = lazy(() => import("../components/pages/PostManage"));
 export const CvApplyManage = lazy(
     () => import("../components/pages/CvApplyManage")
 );
+export const FindCv = lazy(() => import("../components/pages/FindCv"));
+export const Companies = lazy(() => import("../components/pages/Companies"));
+export const CategoryManage = lazy(
+    () => import("../components/pages/CategoryManage")
+);

@@ -2,6 +2,8 @@
     "headers": {
         "job": "Job",
         "cvManage": "CV Manage",
+        "findCv": "Search user",
+        "companies": "Companies",
         "buttons": {
             "login": "Login",
             "register": "Register"
@@ -11,6 +13,19 @@
             "manage": "Manage",
             "logout": "Logout"
         }
+    },
+    "buttons": {
+        "new": "New",
+        "delete": "Delete",
+        "update": "Update"
+    },
+    "navbar": {
+        "user": "User Manage",
+        "chart": "Statistical",
+        "category": "Category Manage",
+        "postManage": "Job Post Manage",
+        "cvApplyManage": "Cv Apply Manage",
+        "categoryManage": "Category Manage"
     },
     "profile": {
         "title": "Personal Profile",
@@ -25,13 +40,6 @@
                 "cancel": "Cancel"
             }
         }
-    },
-    "navbar": {
-        "user": "User Manage",
-        "chart": "Statistical",
-        "category": "Category Manage",
-        "postManage": "Job Post Manage",
-        "cvApplyManage": "Cv Apply Manage"
     },
     "userManage": {
         "title": "User Manage"

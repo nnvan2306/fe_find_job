@@ -2,6 +2,8 @@
     "headers": {
         "job": "Việc làm",
         "cvManage": "Quản lý CV",
+        "findCv": "Tìm kiếm ứng viên",
+        "companies": "Danh sach công ty",
         "buttons": {
             "login": "Đăng nhập",
             "register": "Đăng Ký"
@@ -11,6 +13,19 @@
             "manage": "Quản lý",
             "logout": "Đăng xuất"
         }
+    },
+    "buttons": {
+        "new": "Tạo mới",
+        "delete": "Xóa",
+        "update": "Cập nhật"
+    },
+    "navbar": {
+        "user": "Quản lý người dùng",
+        "chart": "Thống kê",
+        "category": "Quản lý danh mục",
+        "postManage": "Quản lý tin tuyển dụng",
+        "cvApplyManage": "Quản lý Cv ứng tuyển",
+        "categoryManage": "Quản lý danh mục"
     },
     "profile": {
         "title": "Hồ Sơ Cá Nhân",
@@ -25,13 +40,6 @@
                 "cancel": "Hủy"
             }
         }
-    },
-    "navbar": {
-        "user": "Quản lý người dùng",
-        "chart": "Thống kê",
-        "category": "Quản lý danh mục",
-        "postManage": "Quản lý tin tuyển dụng",
-        "cvApplyManage": "Quản lý Cv ứng tuyển"
     },
     "userManage": {
         "title": "Quản lý người dùng"
