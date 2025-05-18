@@ -8,11 +8,8 @@ import {
     InputGroup,
     InputLeftElement,
     Icon,
-    Avatar,
-    Heading,
     VStack,
     HStack,
-    useColorModeValue,
     Container,
     Checkbox,
     Tag,
@@ -31,7 +28,6 @@ import MainTemPlate from "../../templates/MainTemPlate";
 
 import JobCard from "../../organisms/JobCard";
 
-// Custom Filter component
 const FilterAccordion: React.FC<{
     title: string;
     children: React.ReactNode;
@@ -63,14 +59,13 @@ const FilterAccordion: React.FC<{
 };
 
 const Home = () => {
-    // Sample job data
     const jobs = [
         {
             id: 1,
             title: "Nhân Viên Kinh Doanh/Telesale/Tư Vấn/Chăm Sóc Khách Hàng",
             company: {
                 id: 1,
-                title: "Tech Solutions",
+                name: "Tech Solutions",
             },
             location: "Hồ Chí Minh",
             salary: "15 - 30 triệu",
@@ -85,7 +80,7 @@ const Home = () => {
             title: "Frontend Developer (Middle/Senior) - Mức Lương 1000$ - 2000$",
             company: {
                 id: 2,
-                title: "Tech Solutions",
+                name: "Tech Solutions",
             },
             location: "Hà Nội",
             salary: "1,000 - 2,000 USD",
@@ -250,8 +245,6 @@ const Home = () => {
                                         </Button>
                                     </VStack>
                                 </FilterAccordion>
-
-                                {/* Add more filters as needed */}
                             </Accordion>
                         </Box>
 

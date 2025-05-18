@@ -199,9 +199,16 @@ const CvManage: React.FC = () => {
                                 alignItems="center"
                                 mb={6}
                             >
-                                <Heading size="lg">
+                                <Heading
+                                    fontSize={{
+                                        base: "md",
+                                        md: "lg",
+                                        lg: "xl",
+                                    }}
+                                >
                                     CV đã tạo trên Find Job
                                 </Heading>
+
                                 <Button
                                     leftIcon={<FiPlus />}
                                     colorScheme="green"
@@ -275,9 +282,6 @@ const CvManage: React.FC = () => {
                                             <Text fontWeight="bold">
                                                 Văn Ngô ngọc
                                             </Text>
-                                            <Badge colorScheme="gray" mt={1}>
-                                                Tài khoản đã xác thực
-                                            </Badge>
                                         </Box>
                                     </HStack>
                                     <Icon
