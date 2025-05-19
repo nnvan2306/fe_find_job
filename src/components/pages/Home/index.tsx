@@ -48,6 +48,7 @@ const Home = () => {
     const { data: jobData } = useGetJobPosts({
         nest: { category_id: Number(category_id), search: text },
     });
+
     return (
         <MainTemPlate>
             <Box w="100%">

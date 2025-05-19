@@ -51,38 +51,54 @@ const Header = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const navItems = [
-        { label: t("headers.job"), path: routesMap.Home },
-        { label: t("headers.cvManage"), path: routesMap.CvManage },
-        { label: t("headers.findCv"), path: routesMap.FindCv },
-        { label: t("headers.companies"), path: routesMap.Companies },
+        { label: t("headers.job"), path: routesMap.Home, isActive: true },
+        {
+            label: t("headers.cvManage"),
+            path: routesMap.CvManage,
+            isActive: user?.role === "applicant",
+        },
+        {
+            label: t("headers.findCv"),
+            path: routesMap.FindCv,
+            isActive:
+                user?.role === "recruiter" ||
+                user?.role === "company" ||
+                user?.role === "admin",
+        },
+        { label: t("headers.companies"), path: routesMap.Companies, isActive },
     ];
 
     const renderNavItems = () =>
-        navItems.map((item) => (
-            <Text
-                key={item.path}
-                px={3}
-                py={2}
-                fontWeight="medium"
-                color="gray.600"
-                _hover={{
-                    color: greenColor,
-                    transform: "translateY(-1px)",
-                    transition: "all 0.2s",
-                }}
-                cursor="pointer"
-                textTransform="uppercase"
-                fontSize={{ base: "sm", md: "md" }}
-                borderBottom={isActive(item.path) ? "2px solid" : ""}
-                borderColor={greenColor}
-                onClick={() => {
-                    navigate(item.path);
-                    onClose();
-                }}
-            >
-                {item.label}
-            </Text>
-        ));
+        navItems.map((item) => {
+            if (item.isActive) {
+                return (
+                    <Text
+                        key={item.path}
+                        px={3}
+                        py={2}
+                        fontWeight="medium"
+                        color="gray.600"
+                        _hover={{
+                            color: greenColor,
+                            transform: "translateY(-1px)",
+                            transition: "all 0.2s",
+                        }}
+                        cursor="pointer"
+                        textTransform="uppercase"
+                        fontSize={{ base: "sm", md: "md" }}
+                        borderBottom={isActive(item.path) ? "2px solid" : ""}
+                        borderColor={greenColor}
+                        onClick={() => {
+                            navigate(item.path);
+                            onClose();
+                        }}
+                    >
+                        {item.label}
+                    </Text>
+                );
+            }
+            return null;
+        });
 
     return (
         <>
@@ -264,6 +280,11 @@ const Header = () => {
                                                     py={3}
                                                     borderRadius={0}
                                                     _hover={{ bg: itemHoverBg }}
+                                                    onClick={() =>
+                                                        navigate(
+                                                            routesMap.Profile
+                                                        )
+                                                    }
                                                 >
                                                     {t(
                                                         "headers.popover.profile"

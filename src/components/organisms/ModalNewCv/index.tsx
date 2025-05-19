@@ -18,8 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { FiUpload, FiSave, FiX, FiFile } from "react-icons/fi";
 import toast from "../../../libs/toast";
-import { useUploadFile } from "../../../services/upload/upload";
 import { getAxiosError } from "../../../libs/axios";
+import { useUploadFilePdf } from "../../../services/upload/upload-pdf";
 
 interface CreateCVModalProps {
     isOpen: boolean;
@@ -72,7 +72,7 @@ const ModalNewCv = ({
             });
         };
 
-    const { mutate, isPending } = useUploadFile({
+    const { mutate, isPending } = useUploadFilePdf({
         mutationConfig: {
             onSuccess(data) {
                 setFormData((prev) => ({

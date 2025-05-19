@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
     Box,
     Container,
@@ -26,16 +26,78 @@ import { useGetJobPost } from "../../../services/job_post/get-job-post";
 import { useNavigate, useParams } from "react-router-dom";
 import Markdown from "react-markdown";
 import { routesMap } from "../../../routes/routes";
+import { useCreateApplication } from "../../../services/application/create";
+import toast from "../../../libs/toast";
+import { useAppSelector } from "../../../app/hooks";
+import { useGetCvs } from "../../../services/cv/get-cvs";
+import { useGetApplies } from "../../../services/application/get-applies";
 
 const JobDetail: React.FC = () => {
     const bgColor = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.700");
     const mutedColor = useColorModeValue("gray.600", "gray.400");
+    const user = useAppSelector((state) => state.user);
     const { id } = useParams();
     const navigate = useNavigate();
 
     const { data } = useGetJobPost({ id: id || 0 });
     const jobData = useMemo(() => data?.data, [data]);
+
+    const { data: applyData, refetch } = useGetApplies({
+        nest: { user_id: user?.id },
+    });
+    const isApplied = useMemo(() => {
+        return (applyData?.data || []).some(
+            (item) => item.job_post_id === Number(id)
+        );
+    }, [applyData, id]);
+
+    const { data: cvData } = useGetCvs({ nest: { user_id: user?.id } });
+
+    const { mutate: createApplication } = useCreateApplication({
+        mutationConfig: {
+            onSuccess: () => {
+                toast({
+                    title: "Ứng tuyển thành công",
+                    status: "success",
+                });
+                refetch();
+            },
+            onError: () => {
+                toast({
+                    title: "Ứng tuyển thất bại",
+                    status: "error",
+                });
+            },
+        },
+    });
+    const handleApply = useCallback(() => {
+        if (cvData?.data?.length === 0) {
+            toast({
+                title: "Bạn chưa có hồ sơ",
+                status: "warning",
+            });
+            return;
+        }
+        const cv = cvData?.data?.find((item) => item.is_active);
+        if (!cv) {
+            toast({
+                title: "Bạn chưa chọn cv chính",
+                status: "warning",
+            });
+            return;
+        }
+        if (Number(id) && user?.id) {
+            createApplication({
+                user_id: user?.id,
+                job_post_id: Number(id),
+                cv_id: cv?.id,
+                recruiter_id: jobData?.recruiter_id,
+                company_id: jobData?.company_id,
+                status: "pending",
+            });
+        }
+    }, [createApplication, cvData?.data, id, user?.id]);
 
     return (
         <MainTemPlate>
@@ -130,8 +192,10 @@ const JobDetail: React.FC = () => {
                                 width={{ base: "full", md: "auto" }}
                                 leftIcon={<FaUser />}
                                 mt={4}
+                                onClick={isApplied ? undefined : handleApply}
+                                disabled={isApplied}
                             >
-                                Ứng tuyển ngay
+                                {isApplied ? "Đã ứng tuyển" : "Ứng tuyển ngay"}
                             </Button>
                         </Box>
                     </GridItem>

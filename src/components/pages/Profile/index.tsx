@@ -79,8 +79,9 @@ const Profile = () => {
     const handleSave = async () => {
         if (validateForm()) {
             try {
-                await api.put("/user", {
+                await api.put(`/users/${user?.id}`, {
                     ...user,
+                    full_name: user?.name,
                     id: user?.id,
                 });
 
