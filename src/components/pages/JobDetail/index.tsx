@@ -22,58 +22,17 @@ import {
     FaUser,
 } from "react-icons/fa";
 import MainTemPlate from "../../templates/MainTemPlate";
-import { CompanyResponseType } from "../../../types/company";
 import { useGetJobPost } from "../../../services/job_post/get-job-post";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Markdown from "react-markdown";
-
-// Define TypeScript interface based on the database schema
-interface JobPosting {
-    id: number;
-    company_id: number;
-    company: CompanyResponseType;
-    recruiter_id: number;
-    title: string;
-    description: string;
-    location: string;
-    salary_range: string;
-    experience: string;
-    job_type: "full_time" | "part_time" | "internship" | "freelance";
-    required_skills: string;
-    status: "active" | "closed";
-    created_at: string;
-}
+import { routesMap } from "../../../routes/routes";
 
 const JobDetail: React.FC = () => {
     const bgColor = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.700");
     const mutedColor = useColorModeValue("gray.600", "gray.400");
     const { id } = useParams();
-
-    // const jobData: JobPosting = {
-    //     id: 1,
-    //     company_id: 24,
-    //     company: {
-    //         name: "Chi Nhánh Miền Bắc - Công ty Cổ Phần Phát Triển Đầu Tư Xây Dựng",
-    //         logo_url:
-    //             "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-    //         location:
-    //             "Thôn Viên Nội, Xã Vân Nội, Huyện Đông Anh, Thành phố Hà Nội",
-    //         website: "https://fstack.io.vn/",
-    //     },
-    //     recruiter_id: 12,
-    //     title: "Kế Toán Tổng Hợp (Định Hướng Lên Kế Toán Trưởng/ Kế Toán Phó)",
-    //     description:
-    //         "Kiểm tra đối chiếu số liệu giữa các đơn vị nội bộ, dữ liệu chi tiết và tổng hợp;\nTính giá thành sản phẩm;\nKiểm tra việc tính thuế TNCN, chi phí làm căn cứ thuế;\nBáo cáo thuế GTGT và báo cáo thuế khối văn phòng CT;\nLập quyết toán Thuế;\nCác công việc khác liên quan.",
-    //     location: "Hà Nội: Tòa nhà vườn Đào, 689 Lạc Long Quân, Tây Hồ",
-    //     salary_range: "15 - 20 triệu",
-    //     experience: "3 năm",
-    //     job_type: "full_time",
-    //     required_skills:
-    //         "Đại học chuyên ngành kế toán doanh nghiệp, kế toán tài chính hoặc các ngành liên quan, Sử dụng thành thạo phần mềm tin học văn phòng, các phần mềm (fast) và các nghiệp vụ kế toán",
-    //     status: "active",
-    //     created_at: "2025-05-20T10:00:00",
-    // };
+    const navigate = useNavigate();
 
     const { data } = useGetJobPost({ id: id || 0 });
     const jobData = useMemo(() => data?.data, [data]);
@@ -243,6 +202,14 @@ const JobDetail: React.FC = () => {
                                     variant="outline"
                                     size="sm"
                                     width="full"
+                                    onClick={() =>
+                                        navigate(
+                                            routesMap.CompanyDetail.replace(
+                                                "/:id",
+                                                `/${jobData?.company?.id}`
+                                            )
+                                        )
+                                    }
                                 >
                                     Xem trang công ty
                                 </Button>

@@ -4,20 +4,29 @@ import { QueryConfig } from "../../libs/query";
 
 export const GET_CVS_QUERY_KEY = "cvs";
 
-type Payload = { search?: string; user_id?: number };
-const get = async ({ search }: Payload) => {
-    let query = "/cvs";
-    if (search) {
-        query = `/cvs?search=${search}`;
-    }
+type Payload = { search?: string; user_id?: number; is_shared?: boolean };
+
+const buildQuery = (params: Payload): string => {
+    const query = new URLSearchParams();
+
+    if (params.search) query.append("search", params.search);
+    if (params.user_id) query.append("user_id", params.user_id.toString());
+    if (params.is_shared) query.append("is_shared", "true");
+
+    const queryString = query.toString();
+    return queryString ? `/cvs?${queryString}` : "/cvs";
+};
+
+const get = async (params: Payload) => {
+    const query = buildQuery(params);
     const { data } = await api.get(query);
     return data;
 };
 
-export const getOptions = (nest: Payload) =>
+export const getOptions = (params: Payload) =>
     queryOptions({
-        queryKey: [GET_CVS_QUERY_KEY],
-        queryFn: () => get(nest),
+        queryKey: [GET_CVS_QUERY_KEY, params],
+        queryFn: () => get(params),
     });
 
 type GetType = {

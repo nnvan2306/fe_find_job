@@ -20,6 +20,7 @@ import {
 import { FiSearch, FiDownload, FiEye } from "react-icons/fi";
 import MainTemPlate from "../../templates/MainTemPlate";
 import { useSearchParams } from "react-router-dom";
+import { useGetCvs } from "../../../services/cv/get-cvs";
 
 interface CV {
     id: number;
@@ -83,7 +84,15 @@ const FindCv = () => {
 
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
-    const text = useMemo(() => searchParams.get("search"), [searchParams]);
+    const text = useMemo(
+        () => searchParams.get("search") || "",
+        [searchParams]
+    );
+
+    const { data } = useGetCvs({
+        nest: { is_shared: true, search: text },
+    });
+    const cvs = useMemo(() => data?.data || [], [data]);
 
     const handleSearch = () => {
         setSearchParams({ search: textSearch });
@@ -147,8 +156,8 @@ const FindCv = () => {
                 </Flex>
 
                 <Stack spacing={4}>
-                    {mockCVs.length > 0 ? (
-                        mockCVs.map((cv) => (
+                    {cvs?.length > 0 ? (
+                        cvs.map((cv) => (
                             <Card key={cv.id} variant="outline">
                                 <CardHeader pb={0}>
                                     <Flex
@@ -183,7 +192,10 @@ const FindCv = () => {
                                 </CardHeader>
                                 <CardBody py={3}>
                                     <Text fontSize="sm" mb={3}>
-                                        User ID: {cv.user_id}
+                                        Email: {cv.user.email}
+                                    </Text>
+                                    <Text fontSize="sm" mb={3}>
+                                        address: {cv.user.address}
                                     </Text>
                                     <Text fontWeight="semibold" mb={2}>
                                         Skills:

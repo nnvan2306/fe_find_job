@@ -69,33 +69,6 @@ const CompanyCard = ({ company }: { company: CompanyResponseType }) => {
     );
 };
 
-const featuredCompanies = [
-    {
-        id: 1,
-        name: "CÔNG TY CỔ PHẦN CÔNG NGHỆ & SÁNG TẠO TRẺ TEKY HOLDINGS",
-        description:
-            "Young can do ITTEKY là Tổ chức giáo dục công nghệ STEAM K12 chuẩn Mỹ tiên phong và dẫn đầu tại Việt Nam với hệ sinh thái Học viện - Nền tảng edtech...",
-        logo_url:
-            "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-    },
-    {
-        id: 2,
-        name: "TRUNG TÂM DỊCH VỤ SỐ MOBIFONE - CHI NHÁNH TỔNG CÔNG TY VIỄN THÔNG MOBIFONE",
-        description:
-            "Trung tâm Dịch vụ sốMobiFone là đơn vị trực thuộc Tổng Công ty Viễn thông MobiFone với chức năng phát triển và kinh doanh các dịch vụ giá trị gia tăng...",
-        logo_url:
-            "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-    },
-    {
-        id: 3,
-        name: "VUIHOC.VN",
-        description:
-            'VUIHOC là trường học trực tuyến cho học sinh từ lớp 1 đến lớp 12 với sứ mệnh "đem cơ hội tiếp cận bình đẳng các chương trình giáo dục chất lượng cao, chi phí hợp lý tới học sinh trên mọi miền tổ quốc"...',
-        logo_url:
-            "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-    },
-];
-
 const Companies: React.FC = () => {
     const bgColor = useColorModeValue("gray.50", "gray.900");
     const headingColor = useColorModeValue("green.600", "green.300");
