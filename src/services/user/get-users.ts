@@ -6,6 +6,7 @@ export const GET_USERS_QUERY_KEY = "users";
 
 type Payload = {
     company_id?: number;
+    isUnActive?: boolean;
 };
 
 const get = async ({ company_id }: Payload) => {
@@ -32,5 +33,6 @@ export const useGetUsers = ({ queryConfig, nest }: GetType) => {
     return useQuery({
         ...getOptions(nest),
         ...queryConfig,
+        enabled: Boolean(!nest.isUnActive),
     });
 };
