@@ -4,7 +4,7 @@ import { MutationConfig } from "../../libs/query";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export const createToDo = async (payload: FormData) => {
-    const { data } = await api.post("/upload/single/pdf", payload);
+    const { data } = await api.post("/upload/pdf/single", payload);
     return data;
 };
 

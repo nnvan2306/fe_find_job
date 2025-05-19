@@ -50,7 +50,6 @@ interface CVCardProps {
     isMain?: boolean;
     file_url: string;
     onSetMain?: () => void;
-    onDownload?: () => void;
     onDelete?: () => void;
     onShow: () => void;
     onEdit: () => void;
@@ -61,7 +60,6 @@ const CVCard: React.FC<CVCardProps> = ({
     isMain = false,
     file_url,
     onSetMain,
-    onDownload,
     onDelete,
     onShow,
     onEdit,
@@ -142,13 +140,7 @@ const CVCard: React.FC<CVCardProps> = ({
                         size="sm"
                         onClick={onEdit}
                     />
-                    <IconButton
-                        aria-label="Download"
-                        icon={<FiDownload />}
-                        variant="ghost"
-                        size="sm"
-                        onClick={onDownload}
-                    />
+
                     <IconButton
                         aria-label="Delete"
                         icon={<FiTrash2 />}
@@ -413,11 +405,6 @@ const CvManage: React.FC = () => {
                                                       setDataModal(item);
                                                       onOpen();
                                                   }}
-                                                  onDownload={() =>
-                                                      console.log(
-                                                          "Download main CV"
-                                                      )
-                                                  }
                                                   onDelete={() => {
                                                       setIdDelete(item.id);
                                                       onOpenDelete();
