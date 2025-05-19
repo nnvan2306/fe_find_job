@@ -42,6 +42,8 @@ import ConfirmDelete from "../../organisms/ConfirmDelete";
 import { useUpdateCv } from "../../../services/cv/update";
 import { useSetMainCv } from "../../../services/cv/set-main";
 import { useSetShareCv } from "../../../services/cv/set-shared";
+import { useNavigate } from "react-router-dom";
+import { routesMap } from "../../../routes/routes";
 
 interface CVCardProps {
     title: string;
@@ -170,6 +172,7 @@ const CvManage: React.FC = () => {
     const bgColor = useColorModeValue("gray.50", "gray.900");
     const borderColor = useColorModeValue("gray.200", "gray.700");
 
+    const navigate = useNavigate();
     const user = useAppSelector((state) => state.user);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -181,7 +184,7 @@ const CvManage: React.FC = () => {
     const [dataModal, setDataModal] = useState<CVFormData>(defaultValue);
 
     const { data: dataCvs, refetch } = useGetCvs({
-        nest: { user_id: user?.id },
+        nest: { user_id: user?.id, isUnActive: user?.id ? false : true },
     });
     const cvs = useMemo(() => dataCvs?.data || [], [dataCvs]);
     const isShared = useMemo(
@@ -374,7 +377,11 @@ const CvManage: React.FC = () => {
                                     leftIcon={<FiPlus />}
                                     colorScheme="green"
                                     size="md"
-                                    onClick={onOpen}
+                                    onClick={
+                                        user?.id
+                                            ? onOpen
+                                            : () => navigate(routesMap.Login)
+                                    }
                                 >
                                     Tạo mới
                                 </Button>

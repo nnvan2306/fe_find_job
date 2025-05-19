@@ -4,7 +4,12 @@ import { QueryConfig } from "../../libs/query";
 
 export const GET_CVS_QUERY_KEY = "cvs";
 
-type Payload = { search?: string; user_id?: number; is_shared?: boolean };
+type Payload = {
+    search?: string;
+    user_id?: number;
+    is_shared?: boolean;
+    isUnActive?: boolean;
+};
 
 const buildQuery = (params: Payload): string => {
     const query = new URLSearchParams();
@@ -38,5 +43,6 @@ export const useGetCvs = ({ queryConfig, nest }: GetType) => {
     return useQuery({
         ...getOptions(nest),
         ...queryConfig,
+        enabled: Boolean(!nest.isUnActive),
     });
 };
