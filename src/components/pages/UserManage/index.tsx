@@ -61,7 +61,10 @@ const UserManage = () => {
     });
 
     const { data, refetch } = useGetUsers({
-        nest: { company_id: user?.role === "company" ? user.company_id : 0 },
+        nest: {
+            company_id: user?.role === "company" ? user.company_id : 0,
+            isUnActive: user?.role === "company" && !user.company_id,
+        },
     });
     const users = useMemo(
         () =>
