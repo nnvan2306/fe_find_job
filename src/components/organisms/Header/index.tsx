@@ -332,9 +332,12 @@ const Header = () => {
                                                     py={3}
                                                     borderRadius={0}
                                                     _hover={{ bg: itemHoverBg }}
-                                                    onClick={() =>
-                                                        dispatch(logout())
-                                                    }
+                                                    onClick={() => {
+                                                        dispatch(logout());
+                                                        navigate(
+                                                            routesMap.Home
+                                                        );
+                                                    }}
                                                 >
                                                     {t(
                                                         "headers.popover.logout"
