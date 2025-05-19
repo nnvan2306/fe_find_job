@@ -6,4 +6,5 @@ export type UserResponseType = {
     phone: string;
     avatar_url: string;
     gender: string;
+    company_id: number;
 };

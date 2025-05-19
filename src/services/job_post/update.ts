@@ -5,18 +5,18 @@ import { MutationConfig } from "../../libs/query";
 type PayLoadType = {
     id: number;
     company_id: number;
-    recruiter_id: string;
+    recruiter_id: number;
     title: string;
     description: string;
     location: string;
     salary_range: string;
-    job_type: string;
+    category_id: number;
     required_skills: string;
     status: string;
 };
 
 const update = async (payload: PayLoadType) => {
-    const { data } = await api.put("/job_posts", payload);
+    const { data } = await api.put(`/job-posts/${payload.id}`, payload);
     return data;
 };
 

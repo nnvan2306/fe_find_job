@@ -5,7 +5,7 @@ import { QueryConfig } from "../../libs/query";
 export const GET_COMPANY_QUERY_KEY = "company";
 
 const get = async (id: number) => {
-    const { data } = await api.get(`/company/${id}`);
+    const { data } = await api.get(`/companies/${id}`);
     return data;
 };
 
@@ -24,5 +24,6 @@ export const useGetCompany = ({ queryConfig, id }: GetType) => {
     return useQuery({
         ...getOptions(id),
         ...queryConfig,
+        enabled: Boolean(id),
     });
 };

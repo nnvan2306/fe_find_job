@@ -2,10 +2,10 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import api from "../../libs/axios";
 import { QueryConfig } from "../../libs/query";
 
-export const GET_JOB_POST_QUERY_KEY = "job_posts";
+export const GET_JOB_POST_QUERY_KEY = "job_post";
 
 const get = async (id: number) => {
-    const { data } = await api.get(`/job_posts/${id}`);
+    const { data } = await api.get(`/job-posts/${id}`);
     return data;
 };
 

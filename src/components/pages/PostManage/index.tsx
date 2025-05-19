@@ -18,11 +18,20 @@ import {
 } from "@chakra-ui/react";
 import ManagerTemplate from "../../templates/ManagerTemplate";
 import TableCommon from "../../organisms/TableCommon";
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import toast from "../../../libs/toast";
 import TitleManage from "../../atoms/TitleManage";
+import { useAppSelector } from "../../../app/hooks";
+import { useCreateJobPost } from "../../../services/job_post/create";
+import { getAxiosError } from "../../../libs/axios";
+import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
+import ActionManage from "../../molecules/ActionMAnage";
+import { useGetCategoris } from "../../../services/category/get-all";
+import ConfirmDelete from "../../organisms/ConfirmDelete";
+import { useDeleteJobPost } from "../../../services/job_post/delete";
+import { useUpdateJobPost } from "../../../services/job_post/update";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -33,65 +42,183 @@ const defaultValue = {
     salary_range: "",
     location: "",
     required_skills: "",
-    job_type: 0,
+    category_id: 0,
     status: "active",
     description: "",
 };
 const PostManage = () => {
+    const user = useAppSelector((state) => state.user);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpenDelete,
+        onOpen: onOpenDelete,
+        onClose: onCloseDelete,
+    } = useDisclosure();
+    const [idDelete, setIdDelete] = useState(0);
     const [text, setText] = useState("");
     const [formData, setFormData] = useState(defaultValue);
+
+    const { data: cateData } = useGetCategoris({});
+
+    const { data, refetch } = useGetJobPosts({});
+    const jobPosts = useMemo(
+        () =>
+            (data?.data || []).map((item) => ({
+                ...item,
+                cate: item?.category?.name || "",
+                action: (
+                    <ActionManage
+                        actionDelete={() => {
+                            setIdDelete(item.id);
+                            onOpenDelete();
+                        }}
+                        actionUpdate={
+                            user?.role !== "admin"
+                                ? () => {
+                                      setFormData(item);
+                                      setText(item?.description);
+                                      onOpen();
+                                  }
+                                : undefined
+                        }
+                    />
+                ),
+            })),
+        [data]
+    );
+
+    const { mutate, isPending } = useCreateJobPost({
+        mutationConfig: {
+            onSuccess() {
+                refetch();
+                onClose();
+                toast({
+                    title: "Tạo tin tuyển dụng thành công",
+                    status: "success",
+                });
+            },
+            onError(error) {
+                toast({
+                    title: getAxiosError(error),
+                    status: "error",
+                });
+            },
+        },
+    });
+
+    const { mutate: updatePost, isPending: isPendingUpdate } = useUpdateJobPost(
+        {
+            mutationConfig: {
+                onSuccess() {
+                    refetch();
+                    onClose();
+                    toast({
+                        title: "Cập nhật tin tuyển dụng thành công",
+                        status: "success",
+                    });
+                },
+                onError(error) {
+                    toast({
+                        title: getAxiosError(error),
+                        status: "error",
+                    });
+                },
+            },
+        }
+    );
 
     const handleReset = () => {
         setFormData(defaultValue);
     };
 
-    const handleValidate = () => {
-        const isInvalid = Object.entries(formData).some(
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            ([_, value]) =>
-                (typeof value === "string" && value.trim() === "") ||
-                (typeof value === "number" && value === 0)
-        );
-        if (isInvalid) {
+    const handleSubmit = useCallback(() => {
+        if (
+            !formData.title ||
+            !formData.salary_range ||
+            !formData.description ||
+            !formData.location ||
+            !formData.required_skills ||
+            !formData.category_id
+        ) {
             toast({
                 status: "warning",
-                title: "Vui lòng nhập đủ thông tin",
+                title: "Vui lòng điền đủ thông tin ",
             });
-            return false;
-        } else {
-            return true;
-        }
-    };
-
-    const handleSubmit = () => {
-        const isValid = handleValidate();
-        if (!isValid) {
             return;
         }
-    };
+        if (user?.company_id && user.id) {
+            if (formData?.id) {
+                updatePost({
+                    ...formData,
+                    company_id: user.company_id,
+                    recruiter_id: user.id,
+                    id: formData.id,
+                });
+            } else {
+                mutate({
+                    ...formData,
+                    company_id: user.company_id,
+                    recruiter_id: user.id,
+                });
+            }
+        }
+    }, [user, formData]);
+
+    const { mutate: deletePost, isPending: isPendingDelete } = useDeleteJobPost(
+        {
+            mutationConfig: {
+                onSuccess() {
+                    refetch();
+                    onCloseDelete();
+                    toast({
+                        title: "Xóa tin tuyển dụng thành công",
+                        status: "success",
+                    });
+                },
+                onError(error) {
+                    toast({
+                        title: getAxiosError(error),
+                        status: "error",
+                    });
+                },
+            },
+        }
+    );
+
+    const handleDelete = useCallback(
+        () => deletePost(idDelete),
+        [idDelete, deletePost]
+    );
 
     return (
         <ManagerTemplate>
             <Box>
                 <TitleManage title={"Quản lý tin tuyển dụng"} />
 
-                <HStack justifyContent="end" mb={2}>
-                    <Button
-                        onClick={() => {
-                            onOpen();
-                        }}
-                    >
-                        New
-                    </Button>
-                </HStack>
+                {(user?.role === "company" || user?.role === "recruiter") &&
+                user.company_id ? (
+                    <HStack justifyContent="end" mb={2}>
+                        <Button
+                            onClick={() => {
+                                setText("");
+                                setFormData(defaultValue);
+                                onOpen();
+                            }}
+                        >
+                            New
+                        </Button>
+                    </HStack>
+                ) : null}
+
                 <TableCommon
                     columns={[
                         { key: "title", label: "title", w: "40%" },
+                        { key: "cate", label: "Category", w: "40%" },
+                        { key: "required_skills", label: "Skills", w: "40%" },
                         { key: "status", label: "status", w: "20%" },
                         { key: "action", label: "", w: "40%" },
                     ]}
-                    data={[]}
+                    data={jobPosts}
                 />
 
                 <Modal isOpen={isOpen} onClose={onClose} size="5xl">
@@ -161,16 +288,32 @@ const PostManage = () => {
 
                                 <FormCommon title="Category">
                                     <Select
-                                        value={formData.job_type}
+                                        value={formData.category_id}
                                         onChange={(e) =>
                                             setFormData((prev) => ({
                                                 ...prev,
-                                                job_type: Number(
+                                                category_id: Number(
                                                     e.target.value
                                                 ),
                                             }))
                                         }
-                                    ></Select>
+                                        placeholder="Choose category"
+                                    >
+                                        {cateData?.data?.length
+                                            ? (cateData?.data || []).map(
+                                                  (item) => {
+                                                      return (
+                                                          <option
+                                                              value={item.id}
+                                                              key={item.id}
+                                                          >
+                                                              {item.name}
+                                                          </option>
+                                                      );
+                                                  }
+                                              )
+                                            : null}
+                                    </Select>
                                 </FormCommon>
 
                                 <FormCommon title="Status">
@@ -201,7 +344,7 @@ const PostManage = () => {
                                                 setText(e.text);
                                                 setFormData((prev) => ({
                                                     ...prev,
-                                                    description: e.html,
+                                                    description: e.text,
                                                 }));
                                             }}
                                             value={text}
@@ -222,12 +365,26 @@ const PostManage = () => {
                             >
                                 Close
                             </Button>
-                            <Button variant="ghost" onClick={handleSubmit}>
-                                Tạo
+                            <Button
+                                variant="ghost"
+                                onClick={handleSubmit}
+                                disabled={isPending}
+                            >
+                                {formData?.id ? "Lưu" : "Tạo"}
                             </Button>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>
+
+                <ConfirmDelete
+                    header="Confirm xóa User"
+                    title="Bạn chắc chắn muốn xóa?, hành động này không thể khôi phục."
+                    isOpen={isOpenDelete}
+                    onOpen={onOpenDelete}
+                    onClose={onCloseDelete}
+                    onDelete={handleDelete}
+                    isLoading={isPendingDelete}
+                />
             </Box>
         </ManagerTemplate>
     );

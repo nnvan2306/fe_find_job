@@ -5,13 +5,13 @@ import { QueryConfig } from "../../libs/query";
 export const GET_USERS_QUERY_KEY = "users";
 
 type Payload = {
-    company_id: number;
+    company_id?: number;
 };
 
 const get = async ({ company_id }: Payload) => {
-    let query = "/user";
+    let query = "/users";
     if (company_id) {
-        query = `/user?company_id=${company_id}`;
+        query = `/users?company_id=${company_id}`;
     }
     const { data } = await api.get(query);
     return data;

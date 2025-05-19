@@ -22,6 +22,7 @@ interface LinkItemProps {
     name: string;
     icon: IconType;
     href: string;
+    isActive: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -41,36 +42,43 @@ const Navbar: React.FC<NavbarProps> = (props) => {
             name: t("navbar.myCompany"),
             icon: icons.users,
             href: routesMap.MyCompany,
+            isActive: user?.role === "company",
         },
         {
             name: t("navbar.user"),
             icon: icons.users,
             href: routesMap.UserManage,
+            isActive: user?.role === "admin" || user?.role === "company",
         },
         {
             name: t("navbar.companyManage"),
             icon: icons.chart,
             href: routesMap.CompanyManage,
+            isActive: user?.role === "admin",
         },
         {
             name: t("navbar.postManage"),
             icon: icons.chart,
             href: routesMap.PostManage,
+            isActive: true,
         },
         {
             name: t("navbar.cvApplyManage"),
             icon: icons.chart,
             href: routesMap.CvApplyManage,
+            isActive: user?.role === "company" || user?.role === "recruiter",
         },
         {
             name: t("navbar.categoryManage"),
             icon: icons.chart,
             href: routesMap.CategoryManage,
+            isActive: user?.role === "admin",
         },
         {
             name: t("navbar.chart"),
             icon: icons.chart,
             href: routesMap.Chart,
+            isActive: true,
         },
     ];
 
@@ -101,15 +109,21 @@ const Navbar: React.FC<NavbarProps> = (props) => {
             <Divider />
 
             <VStack align="stretch" spacing="1" mt="4">
-                {LinkItems.map((link) => (
-                    <NavItem
-                        key={link.name}
-                        icon={link.icon}
-                        action={() => navigate(link.href)}
-                    >
-                        {link.name}
-                    </NavItem>
-                ))}
+                {LinkItems.map((link) => {
+                    if (link.isActive) {
+                        return (
+                            <NavItem
+                                key={link.name}
+                                icon={link.icon}
+                                action={() => navigate(link.href)}
+                            >
+                                {link.name}
+                            </NavItem>
+                        );
+                    } else {
+                        return null;
+                    }
+                })}
             </VStack>
 
             <Divider mt="6" />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
     Box,
     Button,
@@ -6,11 +6,11 @@ import {
     FormLabel,
     FormHelperText,
     Input,
+    InputLeftElement,
+    InputGroup,
     VStack,
     HStack,
     Text,
-    Heading,
-    useToast,
     Image,
     Card,
     CardBody,
@@ -26,6 +26,14 @@ import {
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import ManagerTemplate from "../../templates/ManagerTemplate";
+import { useUploadFile } from "../../../services/upload/upload";
+import { getAxiosError } from "../../../libs/axios";
+import { useCreateCompany } from "../../../services/company/create";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import toast from "../../../libs/toast";
+import { useGetCompany } from "../../../services/company/get-company";
+import { login } from "../../../store/features/user/userSlice";
+import { useUpdateCompany } from "../../../services/company/update";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -36,9 +44,14 @@ interface Company {
     website: string;
     logo_url: string;
     location: string;
+    owner_id: number;
+    verified: boolean;
 }
 
 const MyCompany = () => {
+    const user = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
+
     const [text, setText] = useState("");
     const [company, setCompany] = useState<Company>({
         name: "",
@@ -47,11 +60,11 @@ const MyCompany = () => {
         website: "",
         logo_url: "",
         location: "",
+        owner_id: 0,
+        verified: false,
     });
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [previewImage, setPreviewImage] = useState<string>("");
-    const toast = useToast();
+    const { data } = useGetCompany({ id: user?.company_id || 0 });
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -63,76 +76,142 @@ const MyCompany = () => {
         }));
     };
 
+    const { mutate, isPending } = useUploadFile({
+        mutationConfig: {
+            onSuccess(data) {
+                setCompany((prev) => ({
+                    ...prev,
+                    logo_url: data?.data || "",
+                }));
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+
     const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewImage(reader.result as string);
-                setCompany((prev) => ({
-                    ...prev,
-                    logo_url: file.name,
-                }));
-            };
-            reader.readAsDataURL(file);
+            const formData = new FormData();
+            formData.append("file", file);
+            mutate(formData);
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const { mutate: createCompany, isPending: isCreating } = useCreateCompany({
+        mutationConfig: {
+            onSuccess(data) {
+                if (user && data?.data?.id) {
+                    dispatch(
+                        login({
+                            ...user,
+                            company_id: data.data.id,
+                        })
+                    );
+                }
+                toast({
+                    status: "success",
+                    title: "Tạo công ty thành công",
+                });
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
 
-        if (!company.name) {
-            toast({
-                title: "Thông tin thiếu",
-                description: "Vui lòng nhập tên công ty",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            });
-            return;
+    const { mutate: updateCompany, isPending: isUpdating } = useUpdateCompany({
+        mutationConfig: {
+            onSuccess() {
+                toast({
+                    status: "success",
+                    title: "Cập nhật công ty thành công",
+                });
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+
+    const handleSubmit = useCallback(
+        (e: React.FormEvent) => {
+            e.preventDefault();
+
+            if (
+                !company.name ||
+                !company.description ||
+                !company.employeeCount ||
+                !company.location ||
+                !company.website
+            ) {
+                toast({
+                    title: "Thông tin thiếu",
+                    description: "Vui lòng nhập đầy đủ thông tin",
+                    status: "error",
+                });
+            }
+            if (user?.id) {
+                if (data?.data?.id) {
+                    updateCompany({ ...company, id: data?.data?.id });
+                } else {
+                    createCompany({ ...company, owner_id: user?.id });
+                }
+            }
+        },
+        [company, user?.id, createCompany, data?.data?.id]
+    );
+
+    useEffect(() => {
+        if (data) {
+            setCompany(data?.data);
+            setText(data?.data?.description);
         }
-
-        setIsLoading(true);
-    };
+    }, [data]);
 
     return (
         <ManagerTemplate>
             <Box p={4} mx="auto" w="100%">
                 <VStack spacing={8} align="stretch">
-                    {/* <Heading size="lg" textAlign="center">
-                        Tạo Công Ty Mới
-                    </Heading> */}
-
                     <form onSubmit={handleSubmit}>
                         <Card variant="outline" mb={6}>
                             <CardBody>
                                 <VStack spacing={6} align="stretch">
                                     <Box textAlign="center">
-                                        {previewImage ? (
-                                            <Image
-                                                src={previewImage}
-                                                alt="Company Logo Preview"
-                                                boxSize="150px"
-                                                objectFit="contain"
-                                                mx="auto"
-                                                borderRadius="md"
-                                            />
-                                        ) : (
-                                            <Box
-                                                w="150px"
-                                                h="150px"
-                                                bg="gray.100"
-                                                borderRadius="md"
-                                                display="flex"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                                mx="auto"
-                                            >
+                                        <Box
+                                            w="150px"
+                                            h="150px"
+                                            bg="gray.100"
+                                            borderRadius="md"
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            mx="auto"
+                                        >
+                                            {company.logo_url ? (
+                                                <Image
+                                                    alt="logo"
+                                                    src={company.logo_url}
+                                                    w="100%"
+                                                    h="100%"
+                                                    objectFit="contain"
+                                                />
+                                            ) : (
                                                 <Text color="gray.400">
                                                     Logo công ty
                                                 </Text>
-                                            </Box>
-                                        )}
+                                            )}
+                                        </Box>
                                     </Box>
 
                                     <FormControl>
@@ -149,6 +228,7 @@ const MyCompany = () => {
                                             w="full"
                                             colorScheme="blue"
                                             variant="outline"
+                                            disabled={isPending}
                                         >
                                             Tải lên logo
                                         </Button>
@@ -167,17 +247,18 @@ const MyCompany = () => {
 
                                     <FormControl isRequired>
                                         <FormLabel>Tên công ty</FormLabel>
-                                        <Input
-                                            name="name"
-                                            value={company.name}
-                                            onChange={handleChange}
-                                            placeholder="Nhập tên công ty"
-                                            leftElement={
-                                                <Box pl={2}>
-                                                    <FiInfo />
-                                                </Box>
-                                            }
-                                        />
+                                        <InputGroup>
+                                            <InputLeftElement pointerEvents="none">
+                                                <FiInfo />
+                                            </InputLeftElement>
+                                            <Input
+                                                name="name"
+                                                value={company.name}
+                                                onChange={handleChange}
+                                                placeholder="Nhập tên công ty"
+                                                pl={10}
+                                            />
+                                        </InputGroup>
                                     </FormControl>
 
                                     <HStack spacing={4} align="start">
@@ -185,48 +266,53 @@ const MyCompany = () => {
                                             <FormLabel>
                                                 Số lượng nhân viên
                                             </FormLabel>
-                                            <Input
-                                                name="employeeCount"
-                                                value={company.employeeCount}
-                                                onChange={handleChange}
-                                                placeholder="VD: 10-50"
-                                                leftElement={
-                                                    <Box pl={2}>
-                                                        <FiUsers />
-                                                    </Box>
-                                                }
-                                            />
+                                            <InputGroup>
+                                                <InputLeftElement pointerEvents="none">
+                                                    <FiUsers />
+                                                </InputLeftElement>
+                                                <Input
+                                                    name="employeeCount"
+                                                    value={
+                                                        company.employeeCount
+                                                    }
+                                                    onChange={handleChange}
+                                                    placeholder="VD: 10-50"
+                                                    pl={10}
+                                                />
+                                            </InputGroup>
                                         </FormControl>
 
                                         <FormControl flex={1}>
                                             <FormLabel>Địa điểm</FormLabel>
-                                            <Input
-                                                name="location"
-                                                value={company.location}
-                                                onChange={handleChange}
-                                                placeholder="VD: Tây Mỗ, Hà Nội"
-                                                leftElement={
-                                                    <Box pl={2}>
-                                                        <FiMapPin />
-                                                    </Box>
-                                                }
-                                            />
+                                            <InputGroup>
+                                                <InputLeftElement pointerEvents="none">
+                                                    <FiMapPin />
+                                                </InputLeftElement>
+                                                <Input
+                                                    name="location"
+                                                    value={company.location}
+                                                    onChange={handleChange}
+                                                    placeholder="VD: Tây Mỗ, Hà Nội"
+                                                    pl={10}
+                                                />
+                                            </InputGroup>
                                         </FormControl>
                                     </HStack>
 
                                     <FormControl>
                                         <FormLabel>Website</FormLabel>
-                                        <Input
-                                            name="website"
-                                            value={company.website}
-                                            onChange={handleChange}
-                                            placeholder="https://www.example.com"
-                                            leftElement={
-                                                <Box pl={2}>
-                                                    <FiGlobe />
-                                                </Box>
-                                            }
-                                        />
+                                        <InputGroup>
+                                            <InputLeftElement pointerEvents="none">
+                                                <FiGlobe />
+                                            </InputLeftElement>
+                                            <Input
+                                                name="website"
+                                                value={company.website}
+                                                onChange={handleChange}
+                                                placeholder="https://www.example.com"
+                                                pl={10}
+                                            />
+                                        </InputGroup>
                                     </FormControl>
 
                                     <FormControl>
@@ -241,7 +327,7 @@ const MyCompany = () => {
                                                 setText(e.text);
                                                 setCompany((prev) => ({
                                                     ...prev,
-                                                    description: e.html,
+                                                    description: e.text,
                                                 }));
                                             }}
                                             value={text}
@@ -258,11 +344,13 @@ const MyCompany = () => {
                                 colorScheme="blue"
                                 size="lg"
                                 leftIcon={<FiSave />}
-                                isLoading={isLoading}
+                                isLoading={isCreating || isUpdating}
                                 loadingText="Đang xử lý..."
                                 px={10}
                             >
-                                Tạo công ty
+                                {data?.data?.id
+                                    ? "Lưu thay đổi"
+                                    : "Tạo công ty"}
                             </Button>
                         </Box>
                     </form>

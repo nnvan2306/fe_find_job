@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
     Box,
     Container,
@@ -23,6 +23,9 @@ import {
 } from "react-icons/fa";
 import MainTemPlate from "../../templates/MainTemPlate";
 import { CompanyResponseType } from "../../../types/company";
+import { useGetJobPost } from "../../../services/job_post/get-job-post";
+import { useParams } from "react-router-dom";
+import Markdown from "react-markdown";
 
 // Define TypeScript interface based on the database schema
 interface JobPosting {
@@ -45,31 +48,35 @@ const JobDetail: React.FC = () => {
     const bgColor = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.700");
     const mutedColor = useColorModeValue("gray.600", "gray.400");
+    const { id } = useParams();
 
-    const jobData: JobPosting = {
-        id: 1,
-        company_id: 24,
-        company: {
-            name: "Chi Nhánh Miền Bắc - Công ty Cổ Phần Phát Triển Đầu Tư Xây Dựng",
-            logo_url:
-                "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
-            location:
-                "Thôn Viên Nội, Xã Vân Nội, Huyện Đông Anh, Thành phố Hà Nội",
-            website: "https://fstack.io.vn/",
-        },
-        recruiter_id: 12,
-        title: "Kế Toán Tổng Hợp (Định Hướng Lên Kế Toán Trưởng/ Kế Toán Phó)",
-        description:
-            "Kiểm tra đối chiếu số liệu giữa các đơn vị nội bộ, dữ liệu chi tiết và tổng hợp;\nTính giá thành sản phẩm;\nKiểm tra việc tính thuế TNCN, chi phí làm căn cứ thuế;\nBáo cáo thuế GTGT và báo cáo thuế khối văn phòng CT;\nLập quyết toán Thuế;\nCác công việc khác liên quan.",
-        location: "Hà Nội: Tòa nhà vườn Đào, 689 Lạc Long Quân, Tây Hồ",
-        salary_range: "15 - 20 triệu",
-        experience: "3 năm",
-        job_type: "full_time",
-        required_skills:
-            "Đại học chuyên ngành kế toán doanh nghiệp, kế toán tài chính hoặc các ngành liên quan, Sử dụng thành thạo phần mềm tin học văn phòng, các phần mềm (fast) và các nghiệp vụ kế toán",
-        status: "active",
-        created_at: "2025-05-20T10:00:00",
-    };
+    // const jobData: JobPosting = {
+    //     id: 1,
+    //     company_id: 24,
+    //     company: {
+    //         name: "Chi Nhánh Miền Bắc - Công ty Cổ Phần Phát Triển Đầu Tư Xây Dựng",
+    //         logo_url:
+    //             "https://cdn-new.topcv.vn/unsafe/140x/https://static.topcv.vn/company_logos/cong-ty-phat-trien-phan-mem-xay-dung-aureole-5ef559f0a19ea.jpg",
+    //         location:
+    //             "Thôn Viên Nội, Xã Vân Nội, Huyện Đông Anh, Thành phố Hà Nội",
+    //         website: "https://fstack.io.vn/",
+    //     },
+    //     recruiter_id: 12,
+    //     title: "Kế Toán Tổng Hợp (Định Hướng Lên Kế Toán Trưởng/ Kế Toán Phó)",
+    //     description:
+    //         "Kiểm tra đối chiếu số liệu giữa các đơn vị nội bộ, dữ liệu chi tiết và tổng hợp;\nTính giá thành sản phẩm;\nKiểm tra việc tính thuế TNCN, chi phí làm căn cứ thuế;\nBáo cáo thuế GTGT và báo cáo thuế khối văn phòng CT;\nLập quyết toán Thuế;\nCác công việc khác liên quan.",
+    //     location: "Hà Nội: Tòa nhà vườn Đào, 689 Lạc Long Quân, Tây Hồ",
+    //     salary_range: "15 - 20 triệu",
+    //     experience: "3 năm",
+    //     job_type: "full_time",
+    //     required_skills:
+    //         "Đại học chuyên ngành kế toán doanh nghiệp, kế toán tài chính hoặc các ngành liên quan, Sử dụng thành thạo phần mềm tin học văn phòng, các phần mềm (fast) và các nghiệp vụ kế toán",
+    //     status: "active",
+    //     created_at: "2025-05-20T10:00:00",
+    // };
+
+    const { data } = useGetJobPost({ id: id || 0 });
+    const jobData = useMemo(() => data?.data, [data]);
 
     return (
         <MainTemPlate>
@@ -103,7 +110,7 @@ const JobDetail: React.FC = () => {
                                             "blue.300"
                                         )}
                                     >
-                                        {jobData.title}
+                                        {jobData?.title || ""}
                                     </Heading>
 
                                     <HStack spacing={6} wrap="wrap">
@@ -114,7 +121,8 @@ const JobDetail: React.FC = () => {
                                                 mr={2}
                                             />
                                             <Text>
-                                                {jobData.company.location}
+                                                {jobData?.company?.location ||
+                                                    ""}
                                             </Text>
                                         </Flex>
                                         <Flex align="center">
@@ -124,7 +132,7 @@ const JobDetail: React.FC = () => {
                                                 mr={2}
                                             />
                                             <Text fontWeight="semibold">
-                                                {jobData.salary_range}
+                                                {jobData?.salary_range || ""}
                                             </Text>
                                         </Flex>
                                         <Flex align="center">
@@ -135,7 +143,7 @@ const JobDetail: React.FC = () => {
                                             />
                                             <Text>
                                                 Kinh nghiệm:{" "}
-                                                {jobData.experience}
+                                                {jobData?.experience || ""}
                                             </Text>
                                         </Flex>
                                     </HStack>
@@ -149,11 +157,11 @@ const JobDetail: React.FC = () => {
                                 <Heading as="h3" size="md" mb={4}>
                                     Mô tả công việc
                                 </Heading>
-                                <Box
-                                    dangerouslySetInnerHTML={{
-                                        __html: jobData.description,
-                                    }}
-                                ></Box>
+                                <Box px={6}>
+                                    <Markdown>
+                                        {jobData?.description || ""}
+                                    </Markdown>
+                                </Box>
                             </Box>
 
                             {/* Apply Button */}
@@ -186,7 +194,9 @@ const JobDetail: React.FC = () => {
                                 <HStack>
                                     <Box>
                                         <Image
-                                            src={jobData.company.logo_url}
+                                            src={
+                                                jobData?.company?.logo_url || ""
+                                            }
                                             alt="Company Logo"
                                             w="100px"
                                             style={{ borderRadius: "8px" }}
@@ -194,7 +204,7 @@ const JobDetail: React.FC = () => {
                                     </Box>
                                     <Box>
                                         <Text fontWeight="bold" fontSize="md">
-                                            {jobData.company.name}
+                                            {jobData?.company?.name || ""}
                                         </Text>
                                     </Box>
                                 </HStack>
@@ -207,7 +217,7 @@ const JobDetail: React.FC = () => {
                                             fontWeight="medium"
                                             textAlign="right"
                                         >
-                                            {jobData.company.location}
+                                            {jobData?.company?.location || ""}
                                         </Text>
                                     </HStack>
                                 </Box>
@@ -222,7 +232,7 @@ const JobDetail: React.FC = () => {
                                             fontWeight="medium"
                                             textAlign="right"
                                         >
-                                            {jobData.company.website}
+                                            {jobData?.company?.website || ""}
                                         </Text>
                                     </HStack>
                                     <Divider my={2} />

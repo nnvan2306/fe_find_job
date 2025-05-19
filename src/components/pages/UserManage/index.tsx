@@ -21,14 +21,30 @@ import {
 import ManagerTemplate from "../../templates/ManagerTemplate";
 import TableCommon from "../../organisms/TableCommon";
 import TitleManage from "../../atoms/TitleManage";
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import { UserResponseType } from "../../../types/user";
 
 import { useTranslation } from "react-i18next";
+import { useGetUsers } from "../../../services/user/get-users";
+import { useAppSelector } from "../../../app/hooks";
+import ActionManage from "../../molecules/ActionMAnage";
+import { useUpdateUser } from "../../../services/user/update";
+import ConfirmDelete from "../../organisms/ConfirmDelete";
+import { useDeleteUser } from "../../../services/user/delete";
+import { useCreateUser } from "../../../services/user/create";
+import toast from "../../../libs/toast";
+import { getAxiosError } from "../../../libs/axios";
 
 const UserManage = () => {
     const { t } = useTranslation();
+    const user = useAppSelector((state) => state.user);
+    const isAdmin = useMemo(() => user?.role === "admin", []);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpenDelete,
+        onOpen: onOpenDelete,
+        onClose: onCloseDelete,
+    } = useDisclosure();
     const {
         isOpen: isOpenNew,
         onOpen: onOpenNew,
@@ -44,24 +60,126 @@ const UserManage = () => {
         confirmPassword: "",
     });
 
-    const isAdmin = true;
+    const { data, refetch } = useGetUsers({
+        nest: { company_id: user?.role === "company" ? user.company_id : 0 },
+    });
+    const users = useMemo(
+        () =>
+            (data?.data || []).map((item) => {
+                return {
+                    ...item,
+                    action: (
+                        <ActionManage
+                            actionDelete={() => {
+                                setIdDelete(item.id);
+                                onOpenDelete();
+                            }}
+                            actionUpdate={() => {
+                                setDataUpdate(item);
+                                onOpen();
+                            }}
+                        />
+                    ),
+                };
+            }),
+        [data]
+    );
+
+    const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteUser({
+        mutationConfig: {
+            onSuccess() {
+                onCloseDelete();
+                refetch();
+            },
+            onError() {},
+        },
+    });
+    const handleDelete = useCallback(
+        () => mutateDelete(idDelete),
+        [idDelete, mutateDelete]
+    );
+
+    const { mutate, isPending } = useUpdateUser({
+        mutationConfig: {
+            onSuccess() {
+                onClose();
+                refetch();
+                toast({
+                    status: "success",
+                    title: "Cập nhật thành công",
+                });
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+
+    const { mutate: mutateCreate } = useCreateUser({
+        mutationConfig: {
+            onSuccess() {
+                onCloseNew();
+                refetch();
+                toast({
+                    status: "success",
+                    title: "Tạo thành công",
+                });
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+    const handleCreateUser = useCallback(() => {
+        if (
+            !newUser.name ||
+            !newUser.email ||
+            !newUser.password ||
+            !newUser.confirmPassword
+        ) {
+            toast({
+                status: "warning",
+                title: "Vui lòng điền đủ thông tin",
+            });
+            return;
+        }
+        if (newUser.password !== newUser.confirmPassword) {
+            toast({
+                status: "warning",
+                title: "Mật khẩu không khớp nhau",
+            });
+        }
+        mutateCreate({
+            ...newUser,
+            full_name: newUser.name,
+            company_id: user?.company_id,
+        });
+    }, [newUser, user?.company_id, mutateCreate]);
 
     return (
         <ManagerTemplate>
             <Box px={5}>
                 <TitleManage title={t("userManage.title")} />
-                <HStack justifyContent="end">
-                    <Button
-                        onClick={() => {
-                            onOpenNew();
-                        }}
-                    >
-                        New
-                    </Button>
+                <HStack justifyContent="end" mb={2}>
+                    {user?.role === "company" && user.company_id ? (
+                        <Button
+                            onClick={() => {
+                                onOpenNew();
+                            }}
+                        >
+                            New
+                        </Button>
+                    ) : null}
                 </HStack>
                 <TableCommon
                     columns={[
-                        { key: "name", label: "Name", w: "20%" },
+                        { key: "full_name", label: "Name", w: "20%" },
                         { key: "email", label: "Email", w: "20%" },
                         { key: "phone", label: "Phone", w: "20%" },
                         {
@@ -75,7 +193,7 @@ const UserManage = () => {
                             w: "20%",
                         },
                     ]}
-                    data={[]}
+                    data={users}
                 />
 
                 <Modal isOpen={isOpen} onClose={onClose} size="5xl">
@@ -178,18 +296,50 @@ const UserManage = () => {
                                     )}
                                 </FormCommon>
 
-                                <FormCommon title="Giới tính">
-                                    {isAdmin ? (
-                                        <Select placeholder="chon role"></Select>
-                                    ) : null}
-                                </FormCommon>
+                                {isAdmin ? (
+                                    <FormCommon title="Role">
+                                        <Select
+                                            placeholder="chon role"
+                                            value={dataUpdate?.role}
+                                            onChange={(e) => {
+                                                setDataUpdate((prev) => {
+                                                    return {
+                                                        ...prev,
+                                                        role:
+                                                            e.target.value ||
+                                                            "",
+                                                    };
+                                                });
+                                            }}
+                                        >
+                                            <option value="company">
+                                                Company
+                                            </option>
+                                            <option value="recruiter">
+                                                Recruiter
+                                            </option>
+                                            <option value="applicant">
+                                                Applicant
+                                            </option>
+                                        </Select>
+                                    </FormCommon>
+                                ) : null}
                             </Grid>
                         </ModalBody>
                         <ModalFooter>
                             <Button colorScheme="blue" mr={3} onClick={onClose}>
                                 Close
                             </Button>
-                            <Button variant="ghost" onClick={() => {}}>
+                            <Button
+                                variant="ghost"
+                                disabled={isPending}
+                                onClick={() =>
+                                    mutate({
+                                        ...dataUpdate,
+                                        full_name: dataUpdate.name,
+                                    })
+                                }
+                            >
                                 Lưu thay đổi
                             </Button>
                         </ModalFooter>
@@ -254,14 +404,14 @@ const UserManage = () => {
                             <Button colorScheme="blue" mr={3} onClick={onClose}>
                                 Close
                             </Button>
-                            <Button variant="ghost" onClick={() => {}}>
-                                Lưu thay đổi
+                            <Button variant="ghost" onClick={handleCreateUser}>
+                                Tạo
                             </Button>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>
 
-                {/* <ConfirmDelete
+                <ConfirmDelete
                     header="Confirm xóa User"
                     title="Bạn chắc chắn muốn xóa?, hành động này không thể khôi phục."
                     isOpen={isOpenDelete}
@@ -269,7 +419,7 @@ const UserManage = () => {
                     onClose={onCloseDelete}
                     onDelete={handleDelete}
                     isLoading={isPendingDelete}
-                /> */}
+                />
             </Box>
         </ManagerTemplate>
     );

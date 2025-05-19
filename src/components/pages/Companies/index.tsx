@@ -22,6 +22,7 @@ import { CompanyResponseType } from "../../../types/company";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { routesMap } from "../../../routes/routes";
 import MainTemPlate from "../../templates/MainTemPlate";
+import { useGetCompanis } from "../../../services/company/get-companies";
 
 const CompanyCard = ({ company }: { company: CompanyResponseType }) => {
     const navigate = useNavigate();
@@ -101,11 +102,16 @@ const Companies: React.FC = () => {
 
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
-    const text = useMemo(() => searchParams.get("search"), [searchParams]);
+    const text = useMemo(
+        () => searchParams.get("search") || "",
+        [searchParams]
+    );
 
     const handleSearch = () => {
         setSearchParams({ search: textSearch });
     };
+
+    const { data } = useGetCompanis({ nest: { search: text } });
 
     useEffect(() => {
         if (text) {
@@ -193,9 +199,16 @@ const Companies: React.FC = () => {
                         columns={{ base: 1, md: 2, lg: 3 }}
                         spacing={10}
                     >
-                        {featuredCompanies.map((company) => (
-                            <CompanyCard key={company.id} company={company} />
-                        ))}
+                        {data?.data?.length
+                            ? (data?.data).map((company) => {
+                                  return (
+                                      <CompanyCard
+                                          key={company.id}
+                                          company={company}
+                                      />
+                                  );
+                              })
+                            : null}
                     </SimpleGrid>
                 </Container>
             </Box>

@@ -4,11 +4,11 @@ import { QueryConfig } from "../../libs/query";
 
 export const GET_CVS_QUERY_KEY = "cvs";
 
-type Payload = { search: string };
+type Payload = { search?: string; user_id?: number };
 const get = async ({ search }: Payload) => {
-    let query = "/cv";
+    let query = "/cvs";
     if (search) {
-        query = `/cv?search=${search}`;
+        query = `/cvs?search=${search}`;
     }
     const { data } = await api.get(query);
     return data;

@@ -14,7 +14,7 @@ type PayLoadType = {
 };
 
 const create = async (payload: PayLoadType) => {
-    const { data } = await api.post("/company", payload);
+    const { data } = await api.post("/companies", payload);
     return data;
 };
 

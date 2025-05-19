@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     Box,
     Flex,
@@ -32,6 +32,16 @@ import {
 import MainTemPlate from "../../templates/MainTemPlate";
 import ModalNewCv, { CVFormData } from "../../organisms/ModalNewCv";
 import icons from "../../../constants/icons";
+import { useCreateCv } from "../../../services/cv/create";
+import { useAppSelector } from "../../../app/hooks";
+import toast from "../../../libs/toast";
+import { getAxiosError } from "../../../libs/axios";
+import { useGetCvs } from "../../../services/cv/get-cvs";
+import { useDeleteCv } from "../../../services/cv/delete";
+import ConfirmDelete from "../../organisms/ConfirmDelete";
+import { useUpdateCv } from "../../../services/cv/update";
+import { useSetMainCv } from "../../../services/cv/set-main";
+import { useSetShareCv } from "../../../services/cv/set-shared";
 
 interface CVCardProps {
     title: string;
@@ -149,46 +159,187 @@ const CVCard: React.FC<CVCardProps> = ({
         </Card>
     );
 };
-
+const defaultValue = {
+    title: "",
+    required_skills: "",
+    file_url: "",
+    is_active: false,
+    is_shared: false,
+};
 const CvManage: React.FC = () => {
     const bgColor = useColorModeValue("gray.50", "gray.900");
     const borderColor = useColorModeValue("gray.200", "gray.700");
 
+    const user = useAppSelector((state) => state.user);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [dataModal, setDataModal] = useState<CVFormData | null>(null);
+    const {
+        isOpen: isOpenDelete,
+        onOpen: onOpenDelete,
+        onClose: onCloseDelete,
+    } = useDisclosure();
+    const [idDelete, setIdDelete] = useState(0);
+    const [dataModal, setDataModal] = useState<CVFormData>(defaultValue);
 
-    const data = [
-        {
-            id: 1,
-            user_id: 1,
-            title: "Ngo Ngoc Van",
-            required_skills: "react,nest,git",
-            file_url:
-                "https://www.topcv.vn/xem-cv/BQIDVgwHUlNRBgQIAV1TA14LV1YCClRUAVQFAw21c9",
-            is_active: true,
-            is_shared: false,
-        },
-        {
-            id: 2,
-            user_id: 1,
-            title: "Ngo Ngoc Van two",
-            required_skills: "node,next",
-            file_url:
-                "https://www.topcv.vn/xem-cv/BQIDVgwHUlNRBgQIAV1TA14LV1YCClRUAVQFAw21c9",
-            is_active: false,
-            is_shared: false,
-        },
-    ];
+    const { data: dataCvs, refetch } = useGetCvs({
+        nest: { user_id: user?.id },
+    });
+    const cvs = useMemo(() => dataCvs?.data || [], [dataCvs]);
+    const isShared = useMemo(
+        () => (cvs || []).some((item) => item.is_shared),
+        [cvs]
+    );
 
     const handleClose = () => {
-        setDataModal(null);
+        setDataModal(defaultValue);
         onClose();
     };
 
-    const isShared = useMemo(
-        () => (data || []).some((item) => item.is_shared),
-        [data]
+    const { mutate } = useCreateCv({
+        mutationConfig: {
+            onSuccess() {
+                toast({
+                    status: "success",
+                    title: "Tạo Cv thành công",
+                });
+                setDataModal(defaultValue);
+                onClose();
+                refetch();
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+    const handleCreateCv = useCallback(
+        (data: CVFormData) => {
+            if (user?.id) {
+                mutate({
+                    ...data,
+                    user_id: user?.id,
+                });
+            }
+        },
+        [user]
     );
+
+    const { mutate: mutateUpdate } = useUpdateCv({
+        mutationConfig: {
+            onSuccess() {
+                toast({
+                    status: "success",
+                    title: "Cập nhật CV thành công",
+                });
+                refetch();
+                onClose();
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+    const handleUpdateCv = useCallback(
+        (data: CVFormData) => {
+            if (user?.id) {
+                mutateUpdate({
+                    ...data,
+                    user_id: user?.id,
+                });
+            }
+        },
+        [user]
+    );
+
+    const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteCv({
+        mutationConfig: {
+            onSuccess() {
+                toast({
+                    status: "success",
+                    title: "Xóa CV thành công",
+                });
+                refetch();
+                onCloseDelete();
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+    const handleDeleteCv = useCallback(() => {
+        console.log("run", idDelete);
+        if (idDelete) {
+            mutateDelete(idDelete);
+        }
+    }, [mutateDelete, idDelete]);
+
+    const { mutate: mutateSetMain } = useSetMainCv({
+        mutationConfig: {
+            onSuccess() {
+                toast({
+                    status: "success",
+                    title: "Cập nhật CV thành công",
+                });
+                refetch();
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+    const handleSetMainCv = useCallback(
+        (idCv: number) => {
+            if (user?.id) {
+                mutateSetMain({
+                    id: user.id,
+                    idCv,
+                });
+            }
+        },
+        [mutateSetMain, user?.id]
+    );
+
+    const { mutate: mutateSetShare } = useSetShareCv({
+        mutationConfig: {
+            onSuccess() {
+                toast({
+                    status: "success",
+                    title: "Bật tìm việc thành công",
+                });
+                refetch();
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
+    const handleSetShareCv = useCallback(() => {
+        if (!(cvs || []).find((item) => item.is_active)) {
+            toast({
+                status: "warning",
+                title: "Vui lòng tạo CV chính",
+            });
+            return;
+        }
+        if (user?.id) {
+            mutateSetShare({
+                id: user.id,
+            });
+        }
+    }, [mutateSetShare, user?.id, cvs]);
 
     return (
         <MainTemPlate>
@@ -236,8 +387,8 @@ const CvManage: React.FC = () => {
                                 }}
                                 gap={6}
                             >
-                                {data?.length
-                                    ? data.map((item) => {
+                                {cvs?.length
+                                    ? cvs.map((item) => {
                                           return (
                                               <CVCard
                                                   key={item.id}
@@ -260,10 +411,12 @@ const CvManage: React.FC = () => {
                                                           "Download main CV"
                                                       )
                                                   }
-                                                  onDelete={() =>
-                                                      console.log(
-                                                          "Delete main CV"
-                                                      )
+                                                  onDelete={() => {
+                                                      setIdDelete(item.id);
+                                                      onOpenDelete();
+                                                  }}
+                                                  onSetMain={() =>
+                                                      handleSetMainCv(item.id)
                                                   }
                                               />
                                           );
@@ -325,6 +478,7 @@ const CvManage: React.FC = () => {
                                             isChecked={isShared}
                                             colorScheme="green"
                                             size="md"
+                                            onChange={handleSetShareCv}
                                         />
                                     </Flex>
                                     <Text fontSize="sm" color="gray.600">
@@ -342,48 +496,6 @@ const CvManage: React.FC = () => {
                                         </Text>
                                     </Text>
                                 </Box>
-
-                                {/* <Box
-                                    mt={2}
-                                    p={2}
-                                    bg="gray.50"
-                                    borderRadius="md"
-                                >
-                                    <Text fontWeight="medium">
-                                        1 CV đang được chọn
-                                    </Text>
-                                    <Button
-                                        variant="link"
-                                        colorScheme="blue"
-                                        size="sm"
-                                    >
-                                        Thay đổi
-                                    </Button>
-                                </Box>
-
-                                <Box mt={2}>
-                                    <Flex
-                                        justify="space-between"
-                                        align="center"
-                                        mb={2}
-                                    >
-                                        <Text
-                                            fontWeight="medium"
-                                            color="green.500"
-                                        >
-                                            Cho phép NTD tìm kiếm hồ sơ
-                                        </Text>
-                                        <Switch
-                                            defaultChecked
-                                            colorScheme="green"
-                                            size="md"
-                                        />
-                                    </Flex>
-                                    <Text fontSize="sm" color="gray.600">
-                                        Khi có cơ hội việc làm phù hợp, NTD sẽ
-                                        liên hệ và trao đổi với bạn qua:
-                                    </Text>
-                                </Box> */}
                             </VStack>
                         </Box>
                     </GridItem>
@@ -392,9 +504,19 @@ const CvManage: React.FC = () => {
                 <ModalNewCv
                     isOpen={isOpen}
                     onClose={handleClose}
-                    onSave={() => {}}
+                    onSave={dataModal.id ? handleUpdateCv : handleCreateCv}
                     data={dataModal}
                     isLoading={false}
+                />
+
+                <ConfirmDelete
+                    header="Confirm xóa Cv"
+                    title="Bạn chắc chắn muốn xóa?, hành động này không thể khôi phục."
+                    isOpen={isOpenDelete}
+                    onOpen={onOpenDelete}
+                    onClose={onCloseDelete}
+                    onDelete={handleDeleteCv}
+                    isLoading={isPendingDelete}
                 />
             </Box>
         </MainTemPlate>

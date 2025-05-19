@@ -14,6 +14,7 @@ import { CompanyResponseType } from "../../../types/company";
 import { useNavigate } from "react-router-dom";
 import { routesMap } from "../../../routes/routes";
 import { FiCheck } from "react-icons/fi";
+import { timeAgo } from "../../../helpers/timeAgo";
 
 // Job card component
 interface JobData {
@@ -21,18 +22,23 @@ interface JobData {
     title: string;
     company: CompanyResponseType;
     location: string;
-    salary: string;
+    salary_range: string;
     experience: string;
     requirements?: string;
-    category: string;
+    category: {
+        name: string;
+    };
+    required_skills: string;
     isVerified: boolean;
     postedTime: string;
+    createdAt: string;
 }
 
 const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
     const borderColor = useColorModeValue("gray.200", "gray.700");
 
     const navigate = useNavigate();
+    console.log(job);
 
     return (
         <Card
@@ -73,26 +79,37 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
                                 )}
                             </Heading>
                             <Text color="green.500" fontWeight="bold">
-                                {job.salary}
+                                {job.salary_range}
                             </Text>
                         </Flex>
                         <Text fontWeight="bold" mt={1}>
                             {job.company.name}
                         </Text>
                         <Flex mt={2} flexWrap="wrap">
-                            <Tag size="sm" mr={2} mb={2} bg="gray.100">
-                                {job.location}
-                            </Tag>
-                            <Tag size="sm" mr={2} mb={2} bg="gray.100">
-                                {job.experience}
-                            </Tag>
+                            {job?.required_skills
+                                ? job?.required_skills
+                                      .split(",")
+                                      .map((item, index) => {
+                                          return (
+                                              <Tag
+                                                  key={index}
+                                                  size="sm"
+                                                  mr={2}
+                                                  mb={2}
+                                                  bg="gray.100"
+                                              >
+                                                  {item.trim()}
+                                              </Tag>
+                                          );
+                                      })
+                                : null}
                         </Flex>
                         <Flex justifyContent="space-between">
                             <Text fontSize="sm" color="gray.500" mt={1}>
-                                {job.category}
+                                {job.category.name}
                             </Text>
                             <Text fontSize="sm" color="gray.500">
-                                {job.postedTime}
+                                {timeAgo(job.createdAt)}
                             </Text>
                         </Flex>
                     </Box>

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
     Box,
     Flex,
@@ -17,40 +17,24 @@ import MainTemPlate from "../../templates/MainTemPlate";
 
 import JobCard from "../../organisms/JobCard";
 import { useGetCategoris } from "../../../services/category/get-all";
+import { useSearchParams } from "react-router-dom";
+import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
 
 const Home = () => {
-    const jobs = [
-        {
-            id: 1,
-            title: "Nhân Viên Kinh Doanh/Telesale/Tư Vấn/Chăm Sóc Khách Hàng",
-            company: {
-                id: 1,
-                name: "Tech Solutions",
-            },
-            location: "Hồ Chí Minh",
-            salary: "15 - 30 triệu",
-            experience: "Không yêu cầu",
-            requirements: "",
-            category: "Call Center/Trực tổng đài",
-            isVerified: true,
-            postedTime: "Đăng 1 tuần trước",
-        },
-        {
-            id: 2,
-            title: "Frontend Developer (Middle/Senior) - Mức Lương 1000$ - 2000$",
-            company: {
-                id: 2,
-                name: "Tech Solutions",
-            },
-            location: "Hà Nội",
-            salary: "1,000 - 2,000 USD",
-            experience: "1 năm",
-            requirements: "ReactJS, JavaScript",
-            category: "IT - Phần mềm",
-            isVerified: true,
-            postedTime: "Đăng 3 ngày trước",
-        },
-    ];
+    const [textSearch, setTextSearch] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const text = useMemo(
+        () => searchParams.get("search") || "",
+        [searchParams]
+    );
+    const category_id = useMemo(
+        () => searchParams.get("category_id") || 0,
+        [searchParams]
+    );
+
+    const handleSearch = () => {
+        setSearchParams({ search: textSearch });
+    };
 
     const { data } = useGetCategoris({});
     const categories = useMemo(
@@ -61,6 +45,9 @@ const Home = () => {
         [data]
     );
 
+    const { data: jobData } = useGetJobPosts({
+        nest: { category_id: Number(category_id), search: text },
+    });
     return (
         <MainTemPlate>
             <Box w="100%">
@@ -74,6 +61,10 @@ const Home = () => {
                                 <Input
                                     placeholder="Vị trí tuyển dụng"
                                     bg="white"
+                                    value={textSearch}
+                                    onChange={(e) =>
+                                        setTextSearch(e.target.value)
+                                    }
                                 />
                             </InputGroup>
 
@@ -105,6 +96,7 @@ const Home = () => {
                                 colorScheme="green"
                                 px={10}
                                 flex={{ base: "1 0 100%", md: "0 0 auto" }}
+                                onClick={handleSearch}
                             >
                                 Tìm kiếm
                             </Button>
@@ -143,11 +135,22 @@ const Home = () => {
                                 </Flex>
                             </Box>
 
-                            <Select placeholder="Chọn Danh mục">
+                            <Select
+                                placeholder="Chọn Danh mục"
+                                value={Number(category_id)}
+                                onChange={(e) =>
+                                    setSearchParams({
+                                        category_id: e.target.value,
+                                    })
+                                }
+                            >
                                 {categories?.length
                                     ? categories.map((item) => {
                                           return (
-                                              <option key={item.id}>
+                                              <option
+                                                  key={item.id}
+                                                  value={item.id}
+                                              >
                                                   {item?.name}
                                               </option>
                                           );
@@ -187,9 +190,11 @@ const Home = () => {
                             </Box>
 
                             <Box>
-                                {jobs.map((job) => (
-                                    <JobCard key={job.id} job={job} />
-                                ))}
+                                {jobData?.data?.length
+                                    ? (jobData?.data || []).map((job) => (
+                                          <JobCard key={job.id} job={job} />
+                                      ))
+                                    : null}
                             </Box>
                         </Box>
                     </Flex>

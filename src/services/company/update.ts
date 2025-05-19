@@ -15,7 +15,7 @@ type PayLoadType = {
 };
 
 const update = async (payload: PayLoadType) => {
-    const { data } = await api.put("/company", payload);
+    const { data } = await api.put(`/companies/${payload.id}`, payload);
     return data;
 };
 

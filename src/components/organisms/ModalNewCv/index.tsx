@@ -12,14 +12,14 @@ import {
     FormLabel,
     Input,
     Textarea,
-    Switch,
     FormHelperText,
-    Box,
     Flex,
     Text,
-    useToast,
 } from "@chakra-ui/react";
 import { FiUpload, FiSave, FiX, FiFile } from "react-icons/fi";
+import toast from "../../../libs/toast";
+import { useUploadFile } from "../../../services/upload/upload";
+import { getAxiosError } from "../../../libs/axios";
 
 interface CreateCVModalProps {
     isOpen: boolean;
@@ -52,9 +52,7 @@ const ModalNewCv = ({
         is_shared: false,
     });
 
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const toast = useToast();
 
     const handleInputChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -74,37 +72,42 @@ const ModalNewCv = ({
             });
         };
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setSelectedFile(file);
+    const { mutate, isPending } = useUploadFile({
+        mutationConfig: {
+            onSuccess(data) {
+                setFormData((prev) => ({
+                    ...prev,
+                    file_url: data?.data || "",
+                }));
+            },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
+        },
+    });
 
-            setFormData({
-                ...formData,
-                file_url: `uploads/${file.name}`,
-            });
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append("file", file);
+            mutate(formData);
         }
     };
 
     const handleSubmit = async () => {
-        if (!formData.title) {
+        if (
+            !formData.title ||
+            !formData.required_skills ||
+            !formData.file_url
+        ) {
             toast({
-                title: "Error",
-                description: "Title is required",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            });
-            return;
-        }
-
-        if (!selectedFile) {
-            toast({
-                title: "Error",
-                description: "Please upload a CV file",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
+                status: "warning",
+                title: "Vui lòng điền đủ thông tin",
+                description: "Please fill in all fields",
             });
             return;
         }
@@ -126,7 +129,6 @@ const ModalNewCv = ({
             is_active: true,
             is_shared: false,
         });
-        setSelectedFile(null);
         onClose();
     };
 
@@ -186,10 +188,11 @@ const ModalNewCv = ({
                                 leftIcon={<FiUpload />}
                                 onClick={triggerFileInput}
                                 colorScheme="blue"
+                                disabled={isPending}
                             >
                                 Select File
                             </Button>
-                            {selectedFile && (
+                            {formData.file_url && (
                                 <Flex
                                     p={2}
                                     alignItems="center"
@@ -199,14 +202,13 @@ const ModalNewCv = ({
                                 >
                                     <Flex alignItems="center">
                                         <FiFile />
-                                        <Text ml={2}>{selectedFile.name}</Text>
+                                        <Text ml={2}>{formData.file_url}</Text>
                                     </Flex>
                                     <Button
                                         size="sm"
                                         colorScheme="red"
                                         variant="ghost"
                                         onClick={() => {
-                                            setSelectedFile(null);
                                             setFormData({
                                                 ...formData,
                                                 file_url: "",
@@ -223,7 +225,7 @@ const ModalNewCv = ({
                         </FormHelperText>
                     </FormControl>
 
-                    <Box mb={4}>
+                    {/* <Box mb={4}>
                         <Flex
                             direction="row"
                             justifyContent="space-between"
@@ -253,7 +255,7 @@ const ModalNewCv = ({
                                 />
                             </FormControl>
                         </Flex>
-                    </Box>
+                    </Box> */}
                 </ModalBody>
 
                 <ModalFooter>
