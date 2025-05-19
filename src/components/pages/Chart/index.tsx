@@ -13,6 +13,7 @@ import { useGetUsers } from "../../../services/user/get-users";
 import { useCallback, useMemo } from "react";
 import { useAppSelector } from "../../../app/hooks";
 import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
+import { useGetApplies } from "../../../services/application/get-applies";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -42,11 +43,18 @@ const Chart = () => {
         },
     });
 
+    const { data: dataApply } = useGetApplies({
+        nest: {
+            recruiter_id: user?.id,
+            isUnActive: user?.role !== "recruiter",
+        },
+    });
+
     const handleBuildLabel = useCallback(() => {
         if (user?.role === "admin") {
             return ["Applicant", "Recruiter", "Company"];
         }
-        if (user?.role === "company") {
+        if (user?.role === "company" || user?.role === "recruiter") {
             return [
                 "1",
                 "2",
@@ -101,8 +109,22 @@ const Chart = () => {
                 },
             ];
         }
+        if (user?.role === "recruiter") {
+            return [
+                {
+                    label: "Chart",
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    data: (dataApply?.data || []).reduce((acc, item) => {
+                        const month = new Date(item.submitted_at).getMonth(); // 0 (Jan) -> 11 (Dec)
+                        acc[month] += 1;
+                        return acc;
+                    }, Array(12).fill(0)),
+                    backgroundColor: "#3182CE",
+                },
+            ];
+        }
         return [];
-    }, [data, dataJob, user?.role]);
+    }, [data, dataJob, dataApply, user?.role]);
 
     const dataChart = useMemo(() => {
         return {

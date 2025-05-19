@@ -8,6 +8,7 @@ type Payload = {
     user_id?: number;
     company_id?: number;
     recruiter_id?: number;
+    isUnActive?: boolean;
 };
 
 const buildQuery = (params?: Payload): string => {
@@ -44,5 +45,6 @@ export const useGetApplies = ({ queryConfig, nest }: GetType) => {
     return useQuery({
         ...getOptions(nest),
         ...queryConfig,
+        enabled: Boolean(!nest?.isUnActive),
     });
 };
