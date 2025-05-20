@@ -19,8 +19,10 @@ import JobCard from "../../organisms/JobCard";
 import { useGetCategoris } from "../../../services/category/get-all";
 import { useSearchParams } from "react-router-dom";
 import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+    const { t } = useTranslation();
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
     const text = useMemo(
@@ -60,7 +62,7 @@ const Home = () => {
                                     <FiSearch color="gray.400" />
                                 </InputLeftElement>
                                 <Input
-                                    placeholder="Vị trí tuyển dụng"
+                                    placeholder={t("home.placeholder")}
                                     bg="white"
                                     value={textSearch}
                                     onChange={(e) =>
@@ -69,37 +71,13 @@ const Home = () => {
                                 />
                             </InputGroup>
 
-                            {/* <Box
-                                position="relative"
-                                flex={{ base: "1 0 100%", md: 1 }}
-                            >
-                                <Menu>
-                                    <MenuButton
-                                        as={Button}
-                                        rightIcon={<FiChevronDown />}
-                                        variant="outline"
-                                        bg="white"
-                                        w="full"
-                                        textAlign="left"
-                                        justifyContent="flex-start"
-                                    >
-                                        Địa điểm
-                                    </MenuButton>
-                                    <MenuList>
-                                        <MenuItem>Hà Nội</MenuItem>
-                                        <MenuItem>Hồ Chí Minh</MenuItem>
-                                        <MenuItem>Đà Nẵng</MenuItem>
-                                    </MenuList>
-                                </Menu>
-                            </Box> */}
-
                             <Button
                                 colorScheme="green"
                                 px={10}
                                 flex={{ base: "1 0 100%", md: "0 0 auto" }}
                                 onClick={handleSearch}
                             >
-                                Tìm kiếm
+                                {t("buttons.search")}
                             </Button>
                         </Flex>
                     </Container>
@@ -124,20 +102,25 @@ const Home = () => {
                                 >
                                     <Text fontWeight="bold" fontSize="lg">
                                         <Icon as={FiFilter} mr={2} />
-                                        Lọc nâng cao
+                                        {t("home.sort")}
                                     </Text>
                                     <Button
                                         variant="link"
                                         colorScheme="green"
                                         size="sm"
+                                        onClick={() =>
+                                            setSearchParams({
+                                                category_id: "",
+                                            })
+                                        }
                                     >
-                                        Xóa lọc
+                                        {t("home.deleteCate")}
                                     </Button>
                                 </Flex>
                             </Box>
 
                             <Select
-                                placeholder="Chọn Danh mục"
+                                placeholder={t("home.selectCategory")}
                                 value={Number(category_id)}
                                 onChange={(e) =>
                                     setSearchParams({
@@ -162,7 +145,7 @@ const Home = () => {
 
                         <Box flex="1">
                             <Box mb={4}>
-                                <Flex
+                                {/* <Flex
                                     mt={4}
                                     justify="start"
                                     alignItems="center"
@@ -187,7 +170,7 @@ const Home = () => {
                                             Cả hai
                                         </Button>
                                     </HStack>
-                                </Flex>
+                                </Flex> */}
                             </Box>
 
                             <Box>

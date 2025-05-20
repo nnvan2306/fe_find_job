@@ -17,7 +17,8 @@
     "buttons": {
         "new": "Tạo mới",
         "delete": "Xóa",
-        "update": "Cập nhật"
+        "update": "Cập nhật",
+        "search": "Tìm kiếm"
     },
     "navbar": {
         "user": "Quản lý người dùng",
@@ -51,5 +52,11 @@
     },
     "postManage": {
         "title": "Quản lý tin tuyển dụng"
+    },
+    "home": {
+        "placeholder": "Vị trí ứng tuyển",
+        "sort": "Lọc nâng cao",
+        "selectCategory": "Chọn danh mục",
+        "deleteCate": "Xóa lọc"
     }
 }

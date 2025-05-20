@@ -17,7 +17,8 @@
     "buttons": {
         "new": "New",
         "delete": "Delete",
-        "update": "Update"
+        "update": "Update",
+        "search": "Search"
     },
     "navbar": {
         "user": "User Manage",
@@ -51,5 +52,11 @@
     },
     "postManage": {
         "title": "Job Post Manage"
+    },
+    "home": {
+        "placeholder": "Applying position",
+        "sort": "Advanced filtering",
+        "selectCategory": "Select category",
+        "deleteCate": "Clear filter"
     }
 }

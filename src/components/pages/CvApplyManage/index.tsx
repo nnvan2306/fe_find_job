@@ -11,6 +11,7 @@ import ConfirmDelete from "../../organisms/ConfirmDelete";
 import { useDeleteApplycation } from "../../../services/application/delete";
 import toast from "../../../libs/toast";
 import { getAxiosError } from "../../../libs/axios";
+import { compareSkills } from "../../../helpers/handleCompare";
 
 const CvApplyManage = () => {
     const user = useAppSelector((state) => state.user);
@@ -41,6 +42,7 @@ const CvApplyManage = () => {
             (applyData?.data || []).map((item) => ({
                 ...item,
                 title: item?.jobPost?.title || "",
+                nature: `${item?.nature || 0}%`,
                 cv: (
                     <Button
                         onClick={() =>
@@ -86,6 +88,8 @@ const CvApplyManage = () => {
         }
     };
 
+    // console.log(compareSkills("a", "s"));
+
     return (
         <ManagerTemplate>
             <Box>
@@ -93,6 +97,7 @@ const CvApplyManage = () => {
                 <TableCommon
                     columns={[
                         { key: "title", label: "Title" },
+                        { key: "nature", label: "Compatible" },
                         { key: "cv", label: "CV" },
                         { key: "action", label: "" },
                     ]}
