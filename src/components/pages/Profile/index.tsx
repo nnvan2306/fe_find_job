@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import { FiEdit, FiMail, FiPhone, FiSave, FiUser, FiX } from "react-icons/fi";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import api from "../../../libs/axios";
-import { setUserSlice } from "../../../store/features/user/userSlice";
+import { login, setUserSlice } from "../../../store/features/user/userSlice";
 import { UserResponseType } from "../../../types/user";
 import MainTemPlate from "../../templates/MainTemPlate";
 
@@ -68,8 +68,8 @@ const Profile = () => {
             newErrors.phone = "Số điện thoại không hợp lệ";
         }
 
-        if (!user.name) {
-            newErrors.name = "Tên không được để trống";
+        if (!user.full_name) {
+            newErrors.full_name = "Tên không được để trống";
         }
 
         setErrors(newErrors);
@@ -79,11 +79,13 @@ const Profile = () => {
     const handleSave = async () => {
         if (validateForm()) {
             try {
-                await api.put(`/users/${user?.id}`, {
+                const data = await api.put(`/users/${user?.id}`, {
                     ...user,
-                    full_name: user?.name,
+                    full_name: user?.full_name,
                     id: user?.id,
                 });
+                // console.log(data);
+                dispatch(login(data?.data?.data));
 
                 toast({
                     title: "Lưu thành công",
@@ -140,16 +142,16 @@ const Profile = () => {
                                     <Box position="relative" mb={4}>
                                         <Avatar
                                             size="2xl"
-                                            name={user.name}
+                                            name={user?.full_name || ""}
                                             src={user.avatar_url}
                                             mb={2}
                                         />
                                     </Box>
                                     <Text fontSize="2xl" fontWeight="bold">
-                                        {user.name}
+                                        {user?.full_name || ""}
                                     </Text>
                                     <Text color="gray.500" mb={4}>
-                                        @{user.name}
+                                        @{user?.full_name || ""}
                                     </Text>
 
                                     {!editMode ? (
@@ -194,7 +196,7 @@ const Profile = () => {
                                     flex={1}
                                     divider={<Divider />}
                                 >
-                                    <FormControl isInvalid={!!errors.name}>
+                                    <FormControl isInvalid={!!errors.full_name}>
                                         <Flex align="center" mb={2}>
                                             <FiUser />
                                             <FormLabel ml={2} mb={0}>
@@ -204,18 +206,20 @@ const Profile = () => {
                                         {editMode ? (
                                             <>
                                                 <Input
-                                                    name="name"
-                                                    value={user.name}
+                                                    name="full_name"
+                                                    value={
+                                                        user?.full_name || ""
+                                                    }
                                                     onChange={handleChange}
                                                 />
-                                                {errors.name && (
+                                                {errors.full_name && (
                                                     <FormErrorMessage>
-                                                        {errors.name}
+                                                        {errors.full_name}
                                                     </FormErrorMessage>
                                                 )}
                                             </>
                                         ) : (
-                                            <Text>{user.name}</Text>
+                                            <Text>{user?.full_name || ""}</Text>
                                         )}
                                     </FormControl>
 
@@ -298,8 +302,8 @@ const Profile = () => {
                                                 {user.gender === "male"
                                                     ? "Nam"
                                                     : user.gender === "female"
-                                                        ? "Nữ"
-                                                        : "Khác"}
+                                                    ? "Nữ"
+                                                    : "Khác"}
                                             </Text>
                                         )}
                                     </FormControl>
