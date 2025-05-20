@@ -55,7 +55,6 @@
     },
     "home": {
         "placeholder": "Vị trí ứng tuyển",
-        "sort": "Lọc nâng cao",
         "selectCategory": "Chọn danh mục",
         "deleteCate": "Xóa lọc"
     }

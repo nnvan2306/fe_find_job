@@ -215,7 +215,7 @@ const Header = () => {
                                             <HStack spacing={3}>
                                                 <Avatar
                                                     size="sm"
-                                                    name={user.name}
+                                                    name={user.full_name}
                                                     src=""
                                                 />
                                                 <Box
@@ -229,7 +229,7 @@ const Header = () => {
                                                         fontSize="sm"
                                                         textAlign="left"
                                                     >
-                                                        {user.name}
+                                                        {user.full_name}
                                                     </Text>
                                                 </Box>
                                             </HStack>
@@ -248,7 +248,7 @@ const Header = () => {
                                                     <HStack spacing={3}>
                                                         <Avatar
                                                             size="md"
-                                                            name={user.name}
+                                                            name={user.full_name}
                                                             src=""
                                                         />
                                                         <Box>
@@ -256,7 +256,7 @@ const Header = () => {
                                                                 fontWeight="medium"
                                                                 fontSize="sm"
                                                             >
-                                                                {user.name}
+                                                                {user.full_name}
                                                             </Text>
                                                             <Text
                                                                 fontSize="xs"
@@ -291,8 +291,8 @@ const Header = () => {
                                                     )}
                                                 </Button>
                                                 {user.role === "admin" ||
-                                                user.role === "company" ||
-                                                user.role === "recruiter" ? (
+                                                    user.role === "company" ||
+                                                    user.role === "recruiter" ? (
                                                     <Button
                                                         variant="ghost"
                                                         justifyContent="flex-start"

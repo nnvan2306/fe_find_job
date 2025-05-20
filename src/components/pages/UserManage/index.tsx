@@ -18,22 +18,22 @@ import {
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import ManagerTemplate from "../../templates/ManagerTemplate";
-import TableCommon from "../../organisms/TableCommon";
-import TitleManage from "../../atoms/TitleManage";
 import { ReactNode, useCallback, useMemo, useState } from "react";
 import { UserResponseType } from "../../../types/user";
+import TitleManage from "../../atoms/TitleManage";
+import TableCommon from "../../organisms/TableCommon";
+import ManagerTemplate from "../../templates/ManagerTemplate";
 
 import { useTranslation } from "react-i18next";
-import { useGetUsers } from "../../../services/user/get-users";
 import { useAppSelector } from "../../../app/hooks";
-import ActionManage from "../../molecules/ActionMAnage";
-import { useUpdateUser } from "../../../services/user/update";
-import ConfirmDelete from "../../organisms/ConfirmDelete";
-import { useDeleteUser } from "../../../services/user/delete";
-import { useCreateUser } from "../../../services/user/create";
-import toast from "../../../libs/toast";
 import { getAxiosError } from "../../../libs/axios";
+import toast from "../../../libs/toast";
+import { useCreateUser } from "../../../services/user/create";
+import { useDeleteUser } from "../../../services/user/delete";
+import { useGetUsers } from "../../../services/user/get-users";
+import { useUpdateUser } from "../../../services/user/update";
+import ActionManage from "../../molecules/ActionMAnage";
+import ConfirmDelete from "../../organisms/ConfirmDelete";
 
 const UserManage = () => {
     const { t } = useTranslation();
@@ -94,7 +94,7 @@ const UserManage = () => {
                 onCloseDelete();
                 refetch();
             },
-            onError() {},
+            onError() { },
         },
     });
     const handleDelete = useCallback(

@@ -21,12 +21,12 @@ import { FormEvent, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
+import { getAxiosError } from "../../../libs/axios";
 import toast from "../../../libs/toast";
 import { routesMap } from "../../../routes/routes";
 import { useLogin } from "../../../services/auth/login";
 import { login } from "../../../store/features/user/userSlice";
 import MainTemPlate from "../../templates/MainTemPlate";
-import { getAxiosError } from "../../../libs/axios";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -219,7 +219,7 @@ const Login = () => {
                                                 colorScheme="blue"
                                                 size="sm"
                                             >
-                                                Quên mật khẩu?
+                                                <Link to={"/forget"}>Quên mật khẩu?</Link>
                                             </Button>
                                         </HStack>
 

@@ -298,8 +298,8 @@ const Profile = () => {
                                                 {user.gender === "male"
                                                     ? "Nam"
                                                     : user.gender === "female"
-                                                    ? "Nữ"
-                                                    : "Khác"}
+                                                        ? "Nữ"
+                                                        : "Khác"}
                                             </Text>
                                         )}
                                     </FormControl>

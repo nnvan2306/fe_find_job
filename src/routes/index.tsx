@@ -25,3 +25,8 @@ export const CategoryManage = lazy(
 export const CompanyManage = lazy(
     () => import("../components/pages/CompanyManage")
 );
+<<<<<<< HEAD
+=======
+
+export const ForgetPassword = lazy(() => import("../components/pages/ForgetPass"))
+>>>>>>> 9965ce4eabb97fc6f72f969a6b1413aede398a11

@@ -16,22 +16,22 @@ import {
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import ManagerTemplate from "../../templates/ManagerTemplate";
-import TableCommon from "../../organisms/TableCommon";
-import { ReactNode, useCallback, useMemo, useState } from "react";
 import MarkdownIt from "markdown-it";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import MdEditor from "react-markdown-editor-lite";
-import toast from "../../../libs/toast";
-import TitleManage from "../../atoms/TitleManage";
 import { useAppSelector } from "../../../app/hooks";
-import { useCreateJobPost } from "../../../services/job_post/create";
 import { getAxiosError } from "../../../libs/axios";
-import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
-import ActionManage from "../../molecules/ActionMAnage";
+import toast from "../../../libs/toast";
 import { useGetCategoris } from "../../../services/category/get-all";
-import ConfirmDelete from "../../organisms/ConfirmDelete";
+import { useCreateJobPost } from "../../../services/job_post/create";
 import { useDeleteJobPost } from "../../../services/job_post/delete";
+import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
 import { useUpdateJobPost } from "../../../services/job_post/update";
+import TitleManage from "../../atoms/TitleManage";
+import ActionManage from "../../molecules/ActionMAnage";
+import ConfirmDelete from "../../organisms/ConfirmDelete";
+import TableCommon from "../../organisms/TableCommon";
+import ManagerTemplate from "../../templates/ManagerTemplate";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -75,10 +75,10 @@ const PostManage = () => {
                         actionUpdate={
                             user?.role !== "admin"
                                 ? () => {
-                                      setFormData(item);
-                                      setText(item?.description);
-                                      onOpen();
-                                  }
+                                    setFormData(item);
+                                    setText(item?.description);
+                                    onOpen();
+                                }
                                 : undefined
                         }
                     />
@@ -196,7 +196,7 @@ const PostManage = () => {
                 <TitleManage title={"Quản lý tin tuyển dụng"} />
 
                 {(user?.role === "company" || user?.role === "recruiter") &&
-                user.company_id ? (
+                    user.company_id ? (
                     <HStack justifyContent="end" mb={2}>
                         <Button
                             onClick={() => {
@@ -301,17 +301,17 @@ const PostManage = () => {
                                     >
                                         {cateData?.data?.length
                                             ? (cateData?.data || []).map(
-                                                  (item) => {
-                                                      return (
-                                                          <option
-                                                              value={item.id}
-                                                              key={item.id}
-                                                          >
-                                                              {item.name}
-                                                          </option>
-                                                      );
-                                                  }
-                                              )
+                                                (item) => {
+                                                    return (
+                                                        <option
+                                                            value={item.id}
+                                                            key={item.id}
+                                                        >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                }
+                                            )
                                             : null}
                                     </Select>
                                 </FormCommon>

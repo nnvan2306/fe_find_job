@@ -1,25 +1,24 @@
-import { useMemo, useState } from "react";
 import {
     Box,
-    Flex,
-    Input,
     Button,
-    Text,
+    Container,
+    Flex,
+    Icon,
+    Input,
     InputGroup,
     InputLeftElement,
-    Icon,
-    HStack,
-    Container,
     Select,
+    Text
 } from "@chakra-ui/react";
-import { FiSearch, FiCheck, FiFilter } from "react-icons/fi";
+import { useMemo, useState } from "react";
+import { FiFilter, FiSearch } from "react-icons/fi";
 import MainTemPlate from "../../templates/MainTemPlate";
 
-import JobCard from "../../organisms/JobCard";
-import { useGetCategoris } from "../../../services/category/get-all";
-import { useSearchParams } from "react-router-dom";
-import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
+import { useGetCategoris } from "../../../services/category/get-all";
+import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
+import JobCard from "../../organisms/JobCard";
 
 const Home = () => {
     const { t } = useTranslation();
@@ -130,15 +129,15 @@ const Home = () => {
                             >
                                 {categories?.length
                                     ? categories.map((item) => {
-                                          return (
-                                              <option
-                                                  key={item.id}
-                                                  value={item.id}
-                                              >
-                                                  {item?.name}
-                                              </option>
-                                          );
-                                      })
+                                        return (
+                                            <option
+                                                key={item.id}
+                                                value={item.id}
+                                            >
+                                                {item?.name}
+                                            </option>
+                                        );
+                                    })
                                     : null}
                             </Select>
                         </Box>
@@ -176,8 +175,8 @@ const Home = () => {
                             <Box>
                                 {jobData?.data?.length
                                     ? (jobData?.data || []).map((job) => (
-                                          <JobCard key={job.id} job={job} />
-                                      ))
+                                        <JobCard key={job.id} job={job} />
+                                    ))
                                     : null}
                             </Box>
                         </Box>

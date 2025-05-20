@@ -1,17 +1,16 @@
 import { Box, Button, Icon, useDisclosure } from "@chakra-ui/react";
-import ManagerTemplate from "../../templates/ManagerTemplate";
-import TitleManage from "../../atoms/TitleManage";
-import TableCommon from "../../organisms/TableCommon";
-import { useAppSelector } from "../../../app/hooks";
 import { useMemo, useState } from "react";
-import { useGetApplies } from "../../../services/application/get-applies";
-import ActionManage from "../../molecules/ActionMAnage";
+import { useAppSelector } from "../../../app/hooks";
 import icons from "../../../constants/icons";
-import ConfirmDelete from "../../organisms/ConfirmDelete";
-import { useDeleteApplycation } from "../../../services/application/delete";
-import toast from "../../../libs/toast";
 import { getAxiosError } from "../../../libs/axios";
-import { compareSkills } from "../../../helpers/handleCompare";
+import toast from "../../../libs/toast";
+import { useDeleteApplycation } from "../../../services/application/delete";
+import { useGetApplies } from "../../../services/application/get-applies";
+import TitleManage from "../../atoms/TitleManage";
+import ActionManage from "../../molecules/ActionMAnage";
+import ConfirmDelete from "../../organisms/ConfirmDelete";
+import TableCommon from "../../organisms/TableCommon";
+import ManagerTemplate from "../../templates/ManagerTemplate";
 
 const CvApplyManage = () => {
     const user = useAppSelector((state) => state.user);
