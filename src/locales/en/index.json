@@ -1,0 +1,55 @@
+{
+    "headers": {
+        "job": "Job",
+        "cvManage": "CV Manage",
+        "findCv": "Search user",
+        "companies": "Companies",
+        "buttons": {
+            "login": "Login",
+            "register": "Register"
+        },
+        "popover": {
+            "profile": "Profile",
+            "manage": "Manage",
+            "logout": "Logout"
+        }
+    },
+    "buttons": {
+        "new": "New",
+        "delete": "Delete",
+        "update": "Update"
+    },
+    "navbar": {
+        "user": "User Manage",
+        "chart": "Statistical",
+        "category": "Category Manage",
+        "postManage": "Job Post Manage",
+        "cvApplyManage": "Cv Apply Manage",
+        "categoryManage": "Category Manage",
+        "companyManage": "Company Manage",
+        "myCompany": "My Company"
+    },
+    "profile": {
+        "title": "Personal Profile",
+        "fields": {
+            "fullName": "Full Name",
+            "userName": "Username",
+            "phoneNumber": "Phone Number",
+            "gender": "Gender",
+            "actions": {
+                "edit": "Edit Information",
+                "save": "Save",
+                "cancel": "Cancel"
+            }
+        }
+    },
+    "userManage": {
+        "title": "User Manage"
+    },
+    "chart": {
+        "title": "Statistical"
+    },
+    "postManage": {
+        "title": "Job Post Manage"
+    }
+}
