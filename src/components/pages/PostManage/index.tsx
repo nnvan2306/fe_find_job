@@ -63,7 +63,7 @@ const PostManage = () => {
     const { data, refetch } = useGetJobPosts({});
     const jobPosts = useMemo(
         () =>
-            (data?.data || []).map((item) => ({
+            (data?.data || []).filter(item => item.company_id === user?.company_id).map((item) => ({
                 ...item,
                 cate: item?.category?.name || "",
                 action: (

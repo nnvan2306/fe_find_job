@@ -209,12 +209,12 @@ const UserManage = () => {
                                 <FormCommon title="Name">
                                     {isAdmin ? (
                                         <Input
-                                            value={dataUpdate?.name}
+                                            value={dataUpdate?.full_name}
                                             disabled
                                         />
                                     ) : (
                                         <Input
-                                            value={dataUpdate?.name}
+                                            value={dataUpdate?.full_name}
                                             onChange={(e) => {
                                                 setDataUpdate((prev) => {
                                                     if (!prev) return undefined;

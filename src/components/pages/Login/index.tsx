@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { FormEvent, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
 import { getAxiosError } from "../../../libs/axios";
 import toast from "../../../libs/toast";

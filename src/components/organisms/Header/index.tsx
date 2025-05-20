@@ -45,7 +45,8 @@ const Header = () => {
     const popoverBg = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.700");
     const itemHoverBg = useColorModeValue("gray.100", "gray.700");
-    const user = useAppSelector((state) => state.user);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const user = useAppSelector((state) => state.user) as any;
     const dispatch = useAppDispatch();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -215,7 +216,7 @@ const Header = () => {
                                             <HStack spacing={3}>
                                                 <Avatar
                                                     size="sm"
-                                                    name={user.full_name}
+                                                    name={"asdasd"}
                                                     src=""
                                                 />
                                                 <Box
@@ -229,6 +230,7 @@ const Header = () => {
                                                         fontSize="sm"
                                                         textAlign="left"
                                                     >
+                                                        {console.log(user)}
                                                         {user.full_name}
                                                     </Text>
                                                 </Box>

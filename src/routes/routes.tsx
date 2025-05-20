@@ -7,10 +7,7 @@ import {
     CvApplyManage,
     CvManage,
     FindCv,
-<<<<<<< HEAD
-=======
     ForgetPassword,
->>>>>>> 9965ce4eabb97fc6f72f969a6b1413aede398a11
     Home,
     JobDetail,
     Login,
@@ -36,15 +33,12 @@ export const routes = [
         requiresAuth: false,
     },
     {
-<<<<<<< HEAD
-=======
         name: "Forgot",
         path: "/forget",
         element: <ForgetPassword />,
         requiresAuth: false,
     },
     {
->>>>>>> 9965ce4eabb97fc6f72f969a6b1413aede398a11
         name: "Login",
         path: "/login",
         element: <Login />,
