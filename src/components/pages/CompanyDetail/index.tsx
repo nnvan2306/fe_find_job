@@ -26,8 +26,10 @@ import { useParams } from "react-router-dom";
 import { useGetCompany } from "../../../services/company/get-company";
 import Markdown from "react-markdown";
 import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
+import { useTranslation } from "react-i18next";
 
 const CompanyDetail: React.FC = () => {
+    const { t } = useTranslation();
     const bgColor = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.700");
     const headerBgColor = useColorModeValue("green.500", "green.600");
@@ -91,7 +93,8 @@ const CompanyDetail: React.FC = () => {
                             <Flex alignItems="center">
                                 <Icon as={FaUsers} mr={2} />
                                 <Text fontSize="sm">
-                                    {companyData?.employeeCount || ""}
+                                    {companyData?.employeeCount || ""}{" "}
+                                    {t("companyDetail.people")}
                                 </Text>
                             </Flex>
                         </Box>
@@ -125,7 +128,7 @@ const CompanyDetail: React.FC = () => {
                                         textAlign="left"
                                     >
                                         <Heading size="sm" color="green.700">
-                                            Giới thiệu công ty
+                                            {t("companyDetail.introduction")}
                                         </Heading>
                                     </Box>
                                     <AccordionIcon />
@@ -160,7 +163,7 @@ const CompanyDetail: React.FC = () => {
                             mb={4}
                         >
                             <Heading size="sm" color="green.700">
-                                Thông tin liên hệ
+                                {t("companyDetail.contact")}
                             </Heading>
                         </Box>
 
@@ -171,7 +174,7 @@ const CompanyDetail: React.FC = () => {
                                     fontSize={20}
                                     color={"green"}
                                 />
-                                <Text>địa chi công ty</Text>
+                                <Text> {t("companyDetail.address")}</Text>
                             </HStack>
                             <Text>{companyData?.location || ""}</Text>
                         </Box>
@@ -183,7 +186,7 @@ const CompanyDetail: React.FC = () => {
                                     fontSize={20}
                                     color={"green"}
                                 />
-                                <Text>xem bản đồ</Text>
+                                <Text> {t("companyDetail.map")}</Text>
                             </HStack>
                             <GoogleMap address={companyData?.location || ""} />
                         </Box>
@@ -201,7 +204,7 @@ const CompanyDetail: React.FC = () => {
                 >
                     <Box bg={secondaryBgColor} p={2} borderRadius="md" mb={4}>
                         <Heading size="sm" color="green.700">
-                            Tuyển dụng
+                            {t("companyDetail.recruitment")}
                         </Heading>
                     </Box>
                     <Box>

@@ -15,12 +15,7 @@ import {
     GridItem,
     Image,
 } from "@chakra-ui/react";
-import {
-    FaBriefcase,
-    FaMapMarkerAlt,
-    FaMoneyBillWave,
-    FaUser,
-} from "react-icons/fa";
+import { FaMapMarkerAlt, FaMoneyBillWave, FaUser } from "react-icons/fa";
 import MainTemPlate from "../../templates/MainTemPlate";
 import { useGetJobPost } from "../../../services/job_post/get-job-post";
 import { useNavigate, useParams } from "react-router-dom";
@@ -31,11 +26,13 @@ import toast from "../../../libs/toast";
 import { useAppSelector } from "../../../app/hooks";
 import { useGetCvs } from "../../../services/cv/get-cvs";
 import { useGetApplies } from "../../../services/application/get-applies";
+import { useTranslation } from "react-i18next";
 
 const JobDetail: React.FC = () => {
     const bgColor = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.700");
     const mutedColor = useColorModeValue("gray.600", "gray.400");
+    const { t } = useTranslation();
     const user = useAppSelector((state) => state.user);
     const { id } = useParams();
     const navigate = useNavigate();
@@ -137,17 +134,6 @@ const JobDetail: React.FC = () => {
                                     <HStack spacing={6} wrap="wrap">
                                         <Flex align="center">
                                             <Icon
-                                                as={FaMapMarkerAlt}
-                                                color="red.500"
-                                                mr={2}
-                                            />
-                                            <Text>
-                                                {jobData?.company?.location ||
-                                                    ""}
-                                            </Text>
-                                        </Flex>
-                                        <Flex align="center">
-                                            <Icon
                                                 as={FaMoneyBillWave}
                                                 color="green.500"
                                                 mr={2}
@@ -158,6 +144,17 @@ const JobDetail: React.FC = () => {
                                         </Flex>
                                         <Flex align="center">
                                             <Icon
+                                                as={FaMapMarkerAlt}
+                                                color="red.500"
+                                                mr={2}
+                                            />
+                                            <Text>
+                                                {jobData?.company?.location ||
+                                                    ""}
+                                            </Text>
+                                        </Flex>
+                                        {/* <Flex align="center">
+                                            <Icon
                                                 as={FaBriefcase}
                                                 color="orange.500"
                                                 mr={2}
@@ -166,7 +163,7 @@ const JobDetail: React.FC = () => {
                                                 Kinh nghiệm:{" "}
                                                 {jobData?.experience || ""}
                                             </Text>
-                                        </Flex>
+                                        </Flex> */}
                                     </HStack>
                                 </Box>
                             </Flex>
@@ -176,7 +173,7 @@ const JobDetail: React.FC = () => {
                             {/* Job Description */}
                             <Box mb={8}>
                                 <Heading as="h3" size="md" mb={4}>
-                                    Mô tả công việc
+                                    {t("jobDetail.description")}
                                 </Heading>
                                 <Box px={6}>
                                     <Markdown>
@@ -195,7 +192,9 @@ const JobDetail: React.FC = () => {
                                 onClick={isApplied ? undefined : handleApply}
                                 disabled={isApplied}
                             >
-                                {isApplied ? "Đã ứng tuyển" : "Ứng tuyển ngay"}
+                                {isApplied
+                                    ? t("jobDetail.applyed")
+                                    : t("jobDetail.applyNow")}
                             </Button>
                         </Box>
                     </GridItem>
@@ -212,7 +211,7 @@ const JobDetail: React.FC = () => {
                         >
                             <VStack align="start" spacing={4}>
                                 <Heading as="h3" size="md" mb={2}>
-                                    Thông tin công ty
+                                    {t("jobDetail.companyInfo")}
                                 </Heading>
                                 <HStack>
                                     <Box>
@@ -235,7 +234,10 @@ const JobDetail: React.FC = () => {
                                 <Box width="100%">
                                     <Divider my={2} />
                                     <HStack align="flex-start" py={2} gap={0}>
-                                        <Text color={mutedColor}>Địa chỉ:</Text>
+                                        <Text color={mutedColor}>
+                                            {" "}
+                                            {t("jobDetail.address")}:
+                                        </Text>
                                         <Text
                                             fontWeight="medium"
                                             textAlign="right"
@@ -249,7 +251,7 @@ const JobDetail: React.FC = () => {
                                     <Divider my={2} />
                                     <HStack py={2} align="flex-start">
                                         <Text color={mutedColor}>
-                                            Chi tiết:
+                                            {t("jobDetail.detail")}:
                                         </Text>
                                         <Text
                                             fontWeight="medium"
@@ -275,12 +277,12 @@ const JobDetail: React.FC = () => {
                                         )
                                     }
                                 >
-                                    Xem trang công ty
+                                    {t("jobDetail.viewCompany")}
                                 </Button>
                             </VStack>
                         </Box>
 
-                        <Box
+                        {/* <Box
                             bg={bgColor}
                             p={6}
                             borderRadius="lg"
@@ -308,7 +310,7 @@ const JobDetail: React.FC = () => {
                                     Tây Hồ
                                 </Button>
                             </HStack>
-                        </Box>
+                        </Box> */}
                     </GridItem>
                 </Grid>
             </Container>

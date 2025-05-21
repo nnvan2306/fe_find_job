@@ -90,5 +90,22 @@
             "cancel": "Cancel",
             "save": "Save"
         }
+    },
+    "jobDetail": {
+        "description": "Mô tả công việc",
+        "companyInfo": "Thông tin công ty",
+        "address": "Địa chỉ",
+        "detail": "Chi tiết",
+        "applyNow": "Ứng tuyển ngay",
+        "applyed": "Đã ứng tuyển",
+        "viewCompany": "Xem trang công ty"
+    },
+    "companyDetail": {
+        "introduction": "giới thiệu công ty",
+        "contact": "Thông tin liên hệ",
+        "address": "địa chi công ty",
+        "map": "xem bản đồ",
+        "recruitment": "Tuyển dụng",
+        "people": "Người"
     }
 }

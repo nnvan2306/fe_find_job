@@ -90,5 +90,22 @@
             "cancel": "Cancel",
             "save": "Save"
         }
+    },
+    "jobDetail": {
+        "description": "Job Description",
+        "companyInfo": "Company Information",
+        "address": "Address",
+        "detail": "Details",
+        "applyNow": "Apply Now",
+        "applyed": "Applyed",
+        "viewCompany": "View Company Page"
+    },
+    "companyDetail": {
+        "introduction": "company introduction",
+        "contact": "Contact information",
+        "address": "company address",
+        "map": "view map",
+        "recruitment": "Recruitment",
+        "people": "people"
     }
 }
