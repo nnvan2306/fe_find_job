@@ -38,7 +38,7 @@ import ConfirmDelete from "../../organisms/ConfirmDelete";
 const UserManage = () => {
     const { t } = useTranslation();
     const user = useAppSelector((state) => state.user);
-    const isAdmin = useMemo(() => user?.role === "admin", []);
+    const isAdmin = useMemo(() => user?.role === "admin", [user]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         isOpen: isOpenDelete,
@@ -73,14 +73,22 @@ const UserManage = () => {
                     ...item,
                     action: (
                         <ActionManage
-                            actionDelete={() => {
-                                setIdDelete(item.id);
-                                onOpenDelete();
-                            }}
-                            actionUpdate={() => {
-                                setDataUpdate(item);
-                                onOpen();
-                            }}
+                            actionDelete={
+                                item?.role === "admin"
+                                    ? undefined
+                                    : () => {
+                                          setIdDelete(item.id);
+                                          onOpenDelete();
+                                      }
+                            }
+                            actionUpdate={
+                                item?.role === "admin"
+                                    ? undefined
+                                    : () => {
+                                          setDataUpdate(item);
+                                          onOpen();
+                                      }
+                            }
                         />
                     ),
                 };
@@ -94,7 +102,12 @@ const UserManage = () => {
                 onCloseDelete();
                 refetch();
             },
-            onError() { },
+            onError(error) {
+                toast({
+                    status: "error",
+                    title: getAxiosError(error),
+                });
+            },
         },
     });
     const handleDelete = useCallback(
