@@ -51,7 +51,7 @@ const Register = () => {
                 setEmail("");
                 setPassword("");
                 setConfirmPassword("");
-                // navigate(routesMap.Home);
+                navigate(routesMap.Home);
             },
             onError(error) {
                 toast({

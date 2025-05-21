@@ -250,7 +250,9 @@ const Header = () => {
                                                     <HStack spacing={3}>
                                                         <Avatar
                                                             size="md"
-                                                            name={user.full_name}
+                                                            name={
+                                                                user.full_name
+                                                            }
                                                             src=""
                                                         />
                                                         <Box>
@@ -293,8 +295,8 @@ const Header = () => {
                                                     )}
                                                 </Button>
                                                 {user.role === "admin" ||
-                                                    user.role === "company" ||
-                                                    user.role === "recruiter" ? (
+                                                user.role === "company" ||
+                                                user.role === "recruiter" ? (
                                                     <Button
                                                         variant="ghost"
                                                         justifyContent="flex-start"
@@ -309,11 +311,20 @@ const Header = () => {
                                                         _hover={{
                                                             bg: itemHoverBg,
                                                         }}
-                                                        onClick={() =>
-                                                            navigate(
-                                                                routesMap.UserManage
-                                                            )
-                                                        }
+                                                        onClick={() => {
+                                                            if (
+                                                                user?.role ===
+                                                                "recruiter"
+                                                            ) {
+                                                                navigate(
+                                                                    routesMap.PostManage
+                                                                );
+                                                            } else {
+                                                                navigate(
+                                                                    routesMap.UserManage
+                                                                );
+                                                            }
+                                                        }}
                                                     >
                                                         {t(
                                                             "headers.popover.manage"
