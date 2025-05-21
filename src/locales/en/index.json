@@ -58,5 +58,37 @@
         "sort": "Advanced filtering",
         "selectCategory": "Select category",
         "deleteCate": "Clear filter"
+    },
+    "findCv": {
+        "title": "CV Search",
+        "placeholder": "Search by title or skills...",
+        "mes": "No CVs found matching your criteria",
+        "subMes": "Try adjusting your search or filters"
+    },
+    "companies": {
+        "title": "Discover 100,000+ Featured Companies",
+        "subTitle": "Search company information and find the best place to work for you",
+        "placeholder": "Search by title or skills ....",
+        "label": "LIST OF FEATURED COMPANIES"
+    },
+    "cvManage": {
+        "title": "CV created on Find Job",
+        "new": "Create new",
+        "comeBack": "Welcome back",
+        "status": "Job search status is on",
+        "subStatus": "The Job Search Enable status will automatically turn off after 30 days. If you still need to search for a job, turn Job Search ",
+        "back": "On again",
+        "modal": {
+            "label": "Create new CV",
+            "title": "Title",
+            "titlePlaceholder": "Enter CV title",
+            "skills": "Skills",
+            "skillsPlaceholder": "Enter skills separated by commas",
+            "file": "Upload CV File",
+            "button": "Select file",
+            "text": "Accepted formats: PDF, DOC, DOCX",
+            "cancel": "Cancel",
+            "save": "Save"
+        }
     }
 }

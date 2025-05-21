@@ -44,6 +44,7 @@ import { useSetMainCv } from "../../../services/cv/set-main";
 import { useSetShareCv } from "../../../services/cv/set-shared";
 import { useNavigate } from "react-router-dom";
 import { routesMap } from "../../../routes/routes";
+import { useTranslation } from "react-i18next";
 
 interface CVCardProps {
     title: string;
@@ -164,6 +165,7 @@ const CvManage: React.FC = () => {
     const bgColor = useColorModeValue("gray.50", "gray.900");
     const borderColor = useColorModeValue("gray.200", "gray.700");
 
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.user);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -362,7 +364,7 @@ const CvManage: React.FC = () => {
                                         lg: "xl",
                                     }}
                                 >
-                                    CV đã tạo trên Find Job
+                                    {t("cvManage.title")}
                                 </Heading>
 
                                 <Button
@@ -375,7 +377,7 @@ const CvManage: React.FC = () => {
                                             : () => navigate(routesMap.Login)
                                     }
                                 >
-                                    Tạo mới
+                                    {t("cvManage.new")}
                                 </Button>
                             </Flex>
 
@@ -440,10 +442,10 @@ const CvManage: React.FC = () => {
                                         />
                                         <Box>
                                             <Text fontWeight="medium">
-                                                Chào bạn trở lại,
+                                                {t("cvManage.comeBack")}
                                             </Text>
                                             <Text fontWeight="bold">
-                                                Văn Ngô ngọc
+                                                {user?.full_name || ""}
                                             </Text>
                                         </Box>
                                     </HStack>
@@ -466,7 +468,7 @@ const CvManage: React.FC = () => {
                                             fontWeight="bold"
                                             color="green.500"
                                         >
-                                            Trạng thái tìm việc đang bật
+                                            {t("cvManage.status")}
                                         </Text>
                                         <Switch
                                             isChecked={isShared}
@@ -475,18 +477,19 @@ const CvManage: React.FC = () => {
                                             onChange={handleSetShareCv}
                                         />
                                     </Flex>
-                                    <Text fontSize="sm" color="gray.600">
+                                    {/* <Text fontSize="sm" color="gray.600">
                                         Trạng thái Bật tìm việc sẽ tự động tắt
                                         sau 30 ngày.
-                                    </Text>
+                                    </Text> */}
                                     <Text fontSize="sm" color="gray.600">
-                                        Nếu bạn vẫn còn nhu cầu tìm việc, hãy{" "}
+                                        {t("cvManage.subStatus")}
                                         <Text
                                             as="span"
                                             color="green.500"
                                             fontWeight="medium"
+                                            marginLeft={1}
                                         >
-                                            Bật tìm việc trở lại
+                                            {t("cvManage.back")}
                                         </Text>
                                     </Text>
                                 </Box>

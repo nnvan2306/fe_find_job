@@ -23,6 +23,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { routesMap } from "../../../routes/routes";
 import MainTemPlate from "../../templates/MainTemPlate";
 import { useGetCompanis } from "../../../services/company/get-companies";
+import { useTranslation } from "react-i18next";
 
 const CompanyCard = ({ company }: { company: CompanyResponseType }) => {
     const navigate = useNavigate();
@@ -72,6 +73,7 @@ const CompanyCard = ({ company }: { company: CompanyResponseType }) => {
 const Companies: React.FC = () => {
     const bgColor = useColorModeValue("gray.50", "gray.900");
     const headingColor = useColorModeValue("green.600", "green.300");
+    const { t } = useTranslation();
 
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
@@ -113,11 +115,10 @@ const Companies: React.FC = () => {
                                 color={headingColor}
                                 mb={4}
                             >
-                                Khám phá 100.000+ công ty nổi bật
+                                {t("companies.title")}
                             </Heading>
                             <Text fontSize="lg" mb={8}>
-                                Tra cứu thông tin công ty và tìm kiếm nơi làm
-                                việc tốt nhất dành cho bạn
+                                {t("companies.subTitle")}
                             </Text>
 
                             <Flex
@@ -130,7 +131,7 @@ const Companies: React.FC = () => {
                                         <FiSearch color="gray.300" />
                                     </InputLeftElement>
                                     <Input
-                                        placeholder="Search by title or skills..."
+                                        placeholder={t("companies.placeholder")}
                                         bg="white"
                                         borderRadius="md"
                                         borderRight="none"
@@ -147,7 +148,7 @@ const Companies: React.FC = () => {
                                     borderLeftRadius="none"
                                     onClick={() => handleSearch()}
                                 >
-                                    Tìm kiếm
+                                    {t("buttons.search")}
                                 </Button>
                             </Flex>
                         </Box>
@@ -165,7 +166,7 @@ const Companies: React.FC = () => {
                 {/* Featured Companies Section */}
                 <Container maxW="container.xl">
                     <Heading textAlign="center" mb={12} size="md">
-                        DANH SÁCH CÁC CÔNG TY NỔI BẬT
+                        {t("companies.label")}
                     </Heading>
 
                     <SimpleGrid

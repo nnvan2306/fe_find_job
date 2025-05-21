@@ -8,7 +8,7 @@ import {
     InputGroup,
     InputLeftElement,
     Select,
-    Text
+    Text,
 } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import { FiFilter, FiSearch } from "react-icons/fi";
@@ -129,15 +129,15 @@ const Home = () => {
                             >
                                 {categories?.length
                                     ? categories.map((item) => {
-                                        return (
-                                            <option
-                                                key={item.id}
-                                                value={item.id}
-                                            >
-                                                {item?.name}
-                                            </option>
-                                        );
-                                    })
+                                          return (
+                                              <option
+                                                  key={item.id}
+                                                  value={item.id}
+                                              >
+                                                  {item?.name}
+                                              </option>
+                                          );
+                                      })
                                     : null}
                             </Select>
                         </Box>
@@ -175,8 +175,8 @@ const Home = () => {
                             <Box>
                                 {jobData?.data?.length
                                     ? (jobData?.data || []).map((job) => (
-                                        <JobCard key={job.id} job={job} />
-                                    ))
+                                          <JobCard key={job.id} job={job} />
+                                      ))
                                     : null}
                             </Box>
                         </Box>

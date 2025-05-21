@@ -21,6 +21,7 @@ import { FiSearch, FiDownload, FiEye } from "react-icons/fi";
 import MainTemPlate from "../../templates/MainTemPlate";
 import { useSearchParams } from "react-router-dom";
 import { useGetCvs } from "../../../services/cv/get-cvs";
+import { useTranslation } from "react-i18next";
 
 interface CV {
     id: number;
@@ -33,54 +34,7 @@ interface CV {
 }
 
 const FindCv = () => {
-    const mockCVs: CV[] = [
-        {
-            id: 1,
-            user_id: 101,
-            title: "Senior React Developer",
-            required_skills: "React, TypeScript, Node.js, Redux",
-            file_url:
-                "https://www.topcv.vn/xem-cv/BQIDVgwHUlNRBgQIAV1TA14LV1YCClRUAVQFAw21c9",
-            is_active: true,
-            is_shared: true,
-        },
-        {
-            id: 2,
-            user_id: 102,
-            title: "UX/UI Designer",
-            required_skills: "Figma, Adobe XD, HTML/CSS, User Testing",
-            file_url: "/sample-cv-2.pdf",
-            is_active: true,
-            is_shared: false,
-        },
-        {
-            id: 3,
-            user_id: 103,
-            title: "Full Stack Developer",
-            required_skills: "JavaScript, Python, MongoDB, AWS",
-            file_url: "/sample-cv-3.pdf",
-            is_active: false,
-            is_shared: true,
-        },
-        {
-            id: 4,
-            user_id: 104,
-            title: "DevOps Engineer",
-            required_skills: "Docker, Kubernetes, CI/CD, Linux",
-            file_url: "/sample-cv-4.pdf",
-            is_active: true,
-            is_shared: true,
-        },
-        {
-            id: 5,
-            user_id: 105,
-            title: "Mobile Developer",
-            required_skills: "React Native, Swift, Kotlin, Firebase",
-            file_url: "/sample-cv-5.pdf",
-            is_active: true,
-            is_shared: true,
-        },
-    ];
+    const { t } = useTranslation();
 
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
@@ -128,7 +82,7 @@ const FindCv = () => {
     return (
         <MainTemPlate>
             <Container maxW="container.xl" py={8}>
-                <Heading mb={6}>CV Search</Heading>
+                <Heading mb={6}>{t("findCv.title")}</Heading>
 
                 <Flex mb={6} direction={{ base: "column", md: "row" }} w="100%">
                     <InputGroup size="lg">
@@ -136,7 +90,7 @@ const FindCv = () => {
                             <FiSearch color="gray.300" />
                         </InputLeftElement>
                         <Input
-                            placeholder="Search by title or skills..."
+                            placeholder={t("findCv.placeholder")}
                             bg="white"
                             borderRadius="md"
                             borderRight="none"
@@ -151,7 +105,7 @@ const FindCv = () => {
                         borderLeftRadius="none"
                         onClick={() => handleSearch()}
                     >
-                        Tìm kiếm
+                        {t("buttons.search")}
                     </Button>
                 </Flex>
 
@@ -220,12 +174,8 @@ const FindCv = () => {
                         ))
                     ) : (
                         <Box textAlign="center" py={10}>
-                            <Text fontSize="lg">
-                                No CVs found matching your criteria
-                            </Text>
-                            <Text color="gray.500">
-                                Try adjusting your search or filters
-                            </Text>
+                            <Text fontSize="lg">{t("findCv.mes")}</Text>
+                            <Text color="gray.500">{t("findCv.subMes")}</Text>
                         </Box>
                     )}
                 </Stack>

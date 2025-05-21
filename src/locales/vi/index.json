@@ -55,7 +55,40 @@
     },
     "home": {
         "placeholder": "Vị trí ứng tuyển",
+        "sort": "Lọc nâng cao",
         "selectCategory": "Chọn danh mục",
         "deleteCate": "Xóa lọc"
+    },
+    "findCv": {
+        "title": "Tìm kiếm CV",
+        "placeholder": "Tìm kiếm theo chức danh hoặc kỹ năng...",
+        "mes": "Không tìm thấy CV nào phù hợp với tiêu chí của bạn",
+        "subMes": "Thử điều chỉnh tìm kiếm hoặc bộ lọc của bạn"
+    },
+    "companies": {
+        "title": "Khám phá 100.000+ công ty nổi bật",
+        "subTitle": "Tra cứu thông tin công ty và tìm kiếm nơi làm việc tốt nhất dành cho bạn",
+        "placeholder": "Tìm kiếm theo tiêu đề hoặc kỹ năng ....",
+        "label": "DANH SÁCH CÁC CÔNG TY NỔI BẬT"
+    },
+    "cvManage": {
+        "title": "CV đã tạo trên Find Job",
+        "new": "Tạo mới",
+        "comeBack": "Chào bạn trở lại",
+        "status": "Trạng thái tìm việc đang bật",
+        "subStatus": "Trạng thái Bật tìm việc sẽ tự động tắt sau 30 ngày.Nếu bạn vẫn còn nhu cầu tìm việc, hãy Bật tìm việc",
+        "back": "trở lại",
+        "modal": {
+            "label": "Tạo CV mới",
+            "title": "Tiêu đề",
+            "titlePlaceholder": "Nhập tiêu đề Cv",
+            "skills": "Kỹ năng",
+            "skillsPlaceholder": "Nhập các kỹ năng cách nhau bằng dấu phẩy",
+            "file": "Upload CV File",
+            "button": "Chọn file",
+            "text": "Các định dạng được chấp nhận: PDF, DOC, DOCX",
+            "cancel": "Cancel",
+            "save": "Save"
+        }
     }
 }
