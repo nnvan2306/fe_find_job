@@ -311,7 +311,7 @@ const CvManage: React.FC = () => {
             onSuccess() {
                 toast({
                     status: "success",
-                    title: "Bật tìm việc thành công",
+                    title: "Cập nhật trạng thái tìm việc thành công",
                 });
                 refetch();
             },
