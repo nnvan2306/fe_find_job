@@ -6,12 +6,17 @@ export const GET_COMPANIES_QUERY_KEY = "companies";
 
 type Payload = {
     search?: string;
+    status?: string;
 };
 const get = async (nest?: Payload) => {
-    let query = "/companies";
-    if (nest?.search) {
-        query = `/companies?search=${nest.search}`;
-    }
+    const params = new URLSearchParams();
+
+    if (nest?.search) params.append("search", nest.search);
+    if (nest?.status) params.append("verified", nest.status);
+
+    const query = `/companies${
+        params.toString() ? `?${params.toString()}` : ""
+    }`;
     const { data } = await api.get(query);
     return data;
 };

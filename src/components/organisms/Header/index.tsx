@@ -216,7 +216,7 @@ const Header = () => {
                                             <HStack spacing={3}>
                                                 <Avatar
                                                     size="sm"
-                                                    name={"asdasd"}
+                                                    name={user.full_name}
                                                     src=""
                                                 />
                                                 <Box
@@ -362,7 +362,7 @@ const Header = () => {
                                 </Popover>
                             )}
                             {/* Language */}
-                            <HStack gap={0}>
+                            {/* <HStack gap={0}>
                                 <Button
                                     variant="outline"
                                     w={{ base: "14", md: "16" }}
@@ -417,7 +417,7 @@ const Header = () => {
                                 >
                                     Vi
                                 </Button>
-                            </HStack>
+                            </HStack> */}
                         </HStack>
                     </Flex>
                 </Container>

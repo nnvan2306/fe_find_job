@@ -86,7 +86,9 @@ const Companies: React.FC = () => {
         setSearchParams({ search: textSearch });
     };
 
-    const { data } = useGetCompanis({ nest: { search: text } });
+    const { data } = useGetCompanis({
+        nest: { search: text, status: "active" },
+    });
 
     useEffect(() => {
         if (text) {
