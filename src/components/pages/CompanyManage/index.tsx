@@ -10,10 +10,21 @@ import { useDeleteCategory } from "../../../services/category/delete";
 import { getAxiosError } from "../../../libs/axios";
 import toast from "../../../libs/toast";
 import { useUpdateStatusCompany } from "../../../services/company/updateStatus";
+import { useSearchParams } from "react-router-dom";
+import Pagination from "../../molecules/Pagination";
 
 const CompanyManage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [idDelete, setIdDelete] = useState(0);
+    const [searchParams] = useSearchParams();
+    const page = useMemo(
+        () => Number(searchParams.get("page")) || 1,
+        [searchParams]
+    );
+    const pageSize = useMemo(
+        () => Number(searchParams.get("pageSize")) || 10,
+        [searchParams]
+    );
 
     const { mutate: updateStatus } = useUpdateStatusCompany({
         mutationConfig: {
@@ -40,7 +51,9 @@ const CompanyManage = () => {
         [updateStatus]
     );
 
-    const { data, refetch } = useGetCompanis({});
+    const { data, refetch } = useGetCompanis({
+        nest: { page: page, pageSize: pageSize },
+    });
     const companies = useMemo(() => {
         return (data?.data || []).map((item) => {
             return {
@@ -118,6 +131,10 @@ const CompanyManage = () => {
                         { key: "action", label: "", w: "15%" },
                     ]}
                     data={companies}
+                />
+                <Pagination
+                    currentPage={data?.pagination?.currentPage || 1}
+                    totalPage={data?.pagination?.totalPages || 10}
                 />
                 <ConfirmDelete
                     header="Confirm xóa Company"

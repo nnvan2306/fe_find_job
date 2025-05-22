@@ -22,6 +22,7 @@ import MainTemPlate from "../../templates/MainTemPlate";
 import { useSearchParams } from "react-router-dom";
 import { useGetCvs } from "../../../services/cv/get-cvs";
 import { useTranslation } from "react-i18next";
+import Pagination from "../../molecules/Pagination";
 
 interface CV {
     id: number;
@@ -38,13 +39,21 @@ const FindCv = () => {
 
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
+    const page = useMemo(
+        () => Number(searchParams.get("page")) || 1,
+        [searchParams]
+    );
+    const pageSize = useMemo(
+        () => Number(searchParams.get("pageSize")) || 10,
+        [searchParams]
+    );
     const text = useMemo(
         () => searchParams.get("search") || "",
         [searchParams]
     );
 
     const { data } = useGetCvs({
-        nest: { is_shared: true, search: text },
+        nest: { is_shared: true, search: text, page: page, pageSize: pageSize },
     });
     const cvs = useMemo(() => data?.data || [], [data]);
 
@@ -179,6 +188,10 @@ const FindCv = () => {
                         </Box>
                     )}
                 </Stack>
+                <Pagination
+                    currentPage={data?.pagination?.currentPage || 1}
+                    totalPage={data?.pagination?.totalPages || 10}
+                />
             </Container>
         </MainTemPlate>
     );

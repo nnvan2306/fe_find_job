@@ -32,6 +32,8 @@ import ActionManage from "../../molecules/ActionMAnage";
 import ConfirmDelete from "../../organisms/ConfirmDelete";
 import TableCommon from "../../organisms/TableCommon";
 import ManagerTemplate from "../../templates/ManagerTemplate";
+import Pagination from "../../molecules/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -48,6 +50,15 @@ const defaultValue = {
 };
 const PostManage = () => {
     const user = useAppSelector((state) => state.user);
+    const [searchParams] = useSearchParams();
+    const page = useMemo(
+        () => Number(searchParams.get("page")) || 1,
+        [searchParams]
+    );
+    const pageSize = useMemo(
+        () => Number(searchParams.get("pageSize")) || 10,
+        [searchParams]
+    );
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         isOpen: isOpenDelete,
@@ -60,32 +71,37 @@ const PostManage = () => {
 
     const { data: cateData } = useGetCategoris({});
 
-    const { data, refetch } = useGetJobPosts({});
+    const { data, refetch } = useGetJobPosts({
+        nest: { page: page, pageSize: pageSize },
+    });
     const jobPosts = useMemo(
         () =>
-            (data?.data || [])
-                .filter((item) => item.company_id === user?.company_id)
-                .map((item) => ({
-                    ...item,
-                    cate: item?.category?.name || "",
-                    action: (
-                        <ActionManage
-                            actionDelete={() => {
-                                setIdDelete(item.id);
-                                onOpenDelete();
-                            }}
-                            actionUpdate={
-                                user?.role !== "admin"
-                                    ? () => {
-                                          setFormData(item);
-                                          setText(item?.description);
-                                          onOpen();
-                                      }
-                                    : undefined
-                            }
-                        />
-                    ),
-                })),
+            (user?.role === "admin"
+                ? data?.data || []
+                : (data?.data || []).filter(
+                      (item) => item.company_id === user?.company_id
+                  )
+            ).map((item) => ({
+                ...item,
+                cate: item?.category?.name || "",
+                action: (
+                    <ActionManage
+                        actionDelete={() => {
+                            setIdDelete(item.id);
+                            onOpenDelete();
+                        }}
+                        actionUpdate={
+                            user?.role !== "admin"
+                                ? () => {
+                                      setFormData(item);
+                                      setText(item?.description);
+                                      onOpen();
+                                  }
+                                : undefined
+                        }
+                    />
+                ),
+            })),
         [data]
     );
 
@@ -221,6 +237,10 @@ const PostManage = () => {
                         { key: "action", label: "", w: "20%" },
                     ]}
                     data={jobPosts}
+                />
+                <Pagination
+                    currentPage={data?.pagination?.currentPage || 1}
+                    totalPage={data?.pagination?.totalPages || 10}
                 />
 
                 <Modal isOpen={isOpen} onClose={onClose} size="5xl">

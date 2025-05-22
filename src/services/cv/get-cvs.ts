@@ -9,6 +9,8 @@ type Payload = {
     user_id?: number;
     is_shared?: boolean;
     isUnActive?: boolean;
+    page?: number;
+    pageSize?: number;
 };
 
 const buildQuery = (params: Payload): string => {
@@ -17,6 +19,8 @@ const buildQuery = (params: Payload): string => {
     if (params.search) query.append("search", params.search);
     if (params.user_id) query.append("user_id", params.user_id.toString());
     if (params.is_shared) query.append("is_shared", "true");
+    if (params?.page) query.append("page", params.page.toString());
+    if (params?.pageSize) query.append("pageSize", params.pageSize.toString());
 
     const queryString = query.toString();
     return queryString ? `/cvs?${queryString}` : "/cvs";

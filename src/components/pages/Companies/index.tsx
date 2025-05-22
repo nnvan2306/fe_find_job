@@ -24,6 +24,7 @@ import { routesMap } from "../../../routes/routes";
 import MainTemPlate from "../../templates/MainTemPlate";
 import { useGetCompanis } from "../../../services/company/get-companies";
 import { useTranslation } from "react-i18next";
+import Pagination from "../../molecules/Pagination";
 
 const CompanyCard = ({ company }: { company: CompanyResponseType }) => {
     const navigate = useNavigate();
@@ -61,7 +62,19 @@ const CompanyCard = ({ company }: { company: CompanyResponseType }) => {
                             {company.name}
                         </Text>
                     </HStack>
-                    <Text color="gray.600" fontSize="sm">
+                    {/* <Text color="gray.600" fontSize="sm">
+                        {company.description}
+                    </Text> */}
+                    <Text
+                        color="gray.600"
+                        fontSize="sm"
+                        sx={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 5,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                        }}
+                    >
                         {company.description}
                     </Text>
                 </Stack>
@@ -77,6 +90,14 @@ const Companies: React.FC = () => {
 
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
+    const page = useMemo(
+        () => Number(searchParams.get("page")) || 1,
+        [searchParams]
+    );
+    const pageSize = useMemo(
+        () => Number(searchParams.get("pageSize")) || 10,
+        [searchParams]
+    );
     const text = useMemo(
         () => searchParams.get("search") || "",
         [searchParams]
@@ -87,7 +108,12 @@ const Companies: React.FC = () => {
     };
 
     const { data } = useGetCompanis({
-        nest: { search: text, status: "active" },
+        nest: {
+            search: text,
+            status: "active",
+            page: page,
+            pageSize: pageSize,
+        },
     });
 
     useEffect(() => {
@@ -186,6 +212,10 @@ const Companies: React.FC = () => {
                               })
                             : null}
                     </SimpleGrid>
+                    <Pagination
+                        currentPage={data?.pagination?.currentPage || 1}
+                        totalPage={data?.pagination?.totalPages || 10}
+                    />
                 </Container>
             </Box>
         </MainTemPlate>

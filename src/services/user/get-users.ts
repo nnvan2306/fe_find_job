@@ -7,20 +7,28 @@ export const GET_USERS_QUERY_KEY = "users";
 type Payload = {
     company_id?: number;
     isUnActive?: boolean;
+    page?: number;
+    pageSize?: number;
 };
 
-const get = async ({ company_id }: Payload) => {
-    let query = "/users";
-    if (company_id) {
-        query = `/users?company_id=${company_id}`;
-    }
+const get = async (nest?: Payload) => {
+    const params = new URLSearchParams();
+
+    if (nest?.company_id)
+        params.append("company_id", nest.company_id.toString());
+    if (nest?.isUnActive !== undefined)
+        params.append("isUnActive", String(nest.isUnActive));
+    if (nest?.page) params.append("page", nest.page.toString());
+    if (nest?.pageSize) params.append("pageSize", nest.pageSize.toString());
+
+    const query = `/users${params.toString() ? `?${params.toString()}` : ""}`;
     const { data } = await api.get(query);
     return data;
 };
 
 export const getOptions = (nest: Payload) =>
     queryOptions({
-        queryKey: [GET_USERS_QUERY_KEY],
+        queryKey: [GET_USERS_QUERY_KEY, nest],
         queryFn: () => get(nest),
     });
 

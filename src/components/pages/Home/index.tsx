@@ -19,11 +19,20 @@ import { useSearchParams } from "react-router-dom";
 import { useGetCategoris } from "../../../services/category/get-all";
 import { useGetJobPosts } from "../../../services/job_post/get-job-posts";
 import JobCard from "../../organisms/JobCard";
+import Pagination from "../../molecules/Pagination";
 
 const Home = () => {
     const { t } = useTranslation();
     const [textSearch, setTextSearch] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
+    const page = useMemo(
+        () => Number(searchParams.get("page")) || 1,
+        [searchParams]
+    );
+    const pageSize = useMemo(
+        () => Number(searchParams.get("pageSize")) || 10,
+        [searchParams]
+    );
     const text = useMemo(
         () => searchParams.get("search") || "",
         [searchParams]
@@ -47,7 +56,12 @@ const Home = () => {
     );
 
     const { data: jobData } = useGetJobPosts({
-        nest: { category_id: Number(category_id), search: text },
+        nest: {
+            category_id: Number(category_id),
+            search: text,
+            page: page,
+            pageSize: pageSize,
+        },
     });
 
     return (
@@ -179,6 +193,14 @@ const Home = () => {
                                       ))
                                     : null}
                             </Box>
+                            <Pagination
+                                currentPage={
+                                    jobData?.pagination?.currentPage || 1
+                                }
+                                totalPage={
+                                    jobData?.pagination?.totalPages || 10
+                                }
+                            />
                         </Box>
                     </Flex>
                 </Container>

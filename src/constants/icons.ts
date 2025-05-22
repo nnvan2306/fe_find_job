@@ -5,6 +5,7 @@ import { FiTrendingUp } from "react-icons/fi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import { FaPenToSquare } from "react-icons/fa6";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 const icons = {
     users: FaUserFriends,
@@ -14,6 +15,8 @@ const icons = {
     close: IoIosCloseCircleOutline,
     eye: IoEyeOutline,
     pen: FaPenToSquare,
+    next: GrFormNext,
+    previous: GrFormPrevious,
 };
 
 export default icons;

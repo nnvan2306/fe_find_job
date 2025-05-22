@@ -34,9 +34,20 @@ import { useGetUsers } from "../../../services/user/get-users";
 import { useUpdateUser } from "../../../services/user/update";
 import ActionManage from "../../molecules/ActionMAnage";
 import ConfirmDelete from "../../organisms/ConfirmDelete";
+import { useSearchParams } from "react-router-dom";
+import Pagination from "../../molecules/Pagination";
 
 const UserManage = () => {
     const { t } = useTranslation();
+    const [searchParams] = useSearchParams();
+    const page = useMemo(
+        () => Number(searchParams.get("page")) || 1,
+        [searchParams]
+    );
+    const pageSize = useMemo(
+        () => Number(searchParams.get("pageSize")) || 10,
+        [searchParams]
+    );
     const user = useAppSelector((state) => state.user);
     const isAdmin = useMemo(() => user?.role === "admin", [user]);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,6 +75,8 @@ const UserManage = () => {
         nest: {
             company_id: user?.role === "company" ? user.company_id : 0,
             isUnActive: user?.role === "company" && !user.company_id,
+            page: page,
+            pageSize: pageSize,
         },
     });
     const users = useMemo(
@@ -210,6 +223,10 @@ const UserManage = () => {
                         },
                     ]}
                     data={users}
+                />
+                <Pagination
+                    currentPage={data?.pagination?.currentPage || 1}
+                    totalPage={data?.pagination?.totalPages || 10}
                 />
 
                 <Modal isOpen={isOpen} onClose={onClose} size="5xl">
