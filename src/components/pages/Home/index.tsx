@@ -59,6 +59,7 @@ const Home = () => {
         nest: {
             category_id: Number(category_id),
             search: text,
+            status: "active",
             page: page,
             pageSize: pageSize,
         },

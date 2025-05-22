@@ -8,7 +8,7 @@ type Payload = {
     search?: string;
     category_id?: number;
     company_id?: number;
-    isUnActive?: boolean;
+    status?: string;
     page?: number;
     pageSize?: number;
 };
@@ -17,6 +17,7 @@ const buildQuery = (params?: Payload): string => {
     const query = new URLSearchParams();
 
     if (params?.search) query.append("search", params.search);
+    if (params?.status) query.append("status", params.status);
     if (params?.category_id)
         query.append("category_id", params.category_id.toString());
     if (params?.company_id)

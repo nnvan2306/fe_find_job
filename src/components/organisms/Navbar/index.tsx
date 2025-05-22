@@ -96,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
             <Flex direction="column" align="center" mb="6" mt="4">
                 <Avatar
                     size="md"
-                    name="User Name"
+                    name={user?.full_name || ""}
                     src="https://bit.ly/broken-link"
                     mb="2"
                 />
