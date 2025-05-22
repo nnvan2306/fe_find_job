@@ -171,7 +171,7 @@ const CategoryManage = () => {
 
                 <TableCommon
                     columns={[
-                        { key: "name", label: "Name", w: "50%" },
+                        { key: "name", label: "Tên", w: "50%" },
 
                         {
                             key: "action",
@@ -186,12 +186,12 @@ const CategoryManage = () => {
                     <ModalOverlay />
                     <ModalContent>
                         <ModalHeader>
-                            {dataUpdate ? "Category Detail" : "New Category"}
+                            {dataUpdate ? "Chi tiết danh mục" : "Tạo danh mục"}
                         </ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             <Box w="100%">
-                                <Text>Name</Text>
+                                <Text>Tên</Text>
                                 <Input
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
@@ -226,7 +226,7 @@ const CategoryManage = () => {
                 </Modal>
 
                 <ConfirmDelete
-                    header="Confirm xóa Category"
+                    header="Confirm xóa Danh mục"
                     title="Bạn chắc chắn muốn xóa?, hành động này không thể khôi phục."
                     isOpen={isOpenDelete}
                     onOpen={onOpenDelete}

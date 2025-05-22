@@ -102,11 +102,11 @@ const CompanyManage = () => {
                 <TitleManage title="Quản Lý công ty" />
                 <TableCommon
                     columns={[
-                        { key: "name", label: "Name", w: "20%" },
+                        { key: "name", label: "Tên", w: "20%" },
                         { key: "logo_url", label: "Logo", w: "15%" },
                         {
                             key: "location",
-                            label: "Location",
+                            label: "Địa chỉ",
                             w: "15%",
                         },
                         {
@@ -120,7 +120,7 @@ const CompanyManage = () => {
                     data={companies}
                 />
                 <ConfirmDelete
-                    header="Confirm xóa Category"
+                    header="Confirm xóa Company"
                     title="Bạn chắc chắn muốn xóa?, hành động này không thể khôi phục."
                     isOpen={isOpen}
                     onOpen={onOpen}

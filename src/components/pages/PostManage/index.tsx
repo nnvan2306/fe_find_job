@@ -63,27 +63,29 @@ const PostManage = () => {
     const { data, refetch } = useGetJobPosts({});
     const jobPosts = useMemo(
         () =>
-            (data?.data || []).filter(item => item.company_id === user?.company_id).map((item) => ({
-                ...item,
-                cate: item?.category?.name || "",
-                action: (
-                    <ActionManage
-                        actionDelete={() => {
-                            setIdDelete(item.id);
-                            onOpenDelete();
-                        }}
-                        actionUpdate={
-                            user?.role !== "admin"
-                                ? () => {
-                                    setFormData(item);
-                                    setText(item?.description);
-                                    onOpen();
-                                }
-                                : undefined
-                        }
-                    />
-                ),
-            })),
+            (data?.data || [])
+                .filter((item) => item.company_id === user?.company_id)
+                .map((item) => ({
+                    ...item,
+                    cate: item?.category?.name || "",
+                    action: (
+                        <ActionManage
+                            actionDelete={() => {
+                                setIdDelete(item.id);
+                                onOpenDelete();
+                            }}
+                            actionUpdate={
+                                user?.role !== "admin"
+                                    ? () => {
+                                          setFormData(item);
+                                          setText(item?.description);
+                                          onOpen();
+                                      }
+                                    : undefined
+                            }
+                        />
+                    ),
+                })),
         [data]
     );
 
@@ -196,7 +198,7 @@ const PostManage = () => {
                 <TitleManage title={"Quản lý tin tuyển dụng"} />
 
                 {(user?.role === "company" || user?.role === "recruiter") &&
-                    user.company_id ? (
+                user.company_id ? (
                     <HStack justifyContent="end" mb={2}>
                         <Button
                             onClick={() => {
@@ -212,11 +214,11 @@ const PostManage = () => {
 
                 <TableCommon
                     columns={[
-                        { key: "title", label: "title", w: "40%" },
-                        { key: "cate", label: "Category", w: "40%" },
-                        { key: "required_skills", label: "Skills", w: "40%" },
-                        { key: "status", label: "status", w: "20%" },
-                        { key: "action", label: "", w: "40%" },
+                        { key: "title", label: "Tiêu đề", w: "20%" },
+                        { key: "cate", label: "Danh mục", w: "20%" },
+                        { key: "required_skills", label: "Kỹ năng", w: "20%" },
+                        { key: "status", label: "Trạng thái", w: "20%" },
+                        { key: "action", label: "", w: "20%" },
                     ]}
                     data={jobPosts}
                 />
@@ -234,9 +236,9 @@ const PostManage = () => {
                                 }}
                                 gap={8}
                             >
-                                <FormCommon title="Title">
+                                <FormCommon title="Tiêu đề">
                                     <Input
-                                        placeholder="Title job post...."
+                                        placeholder="Tiêu đềt...."
                                         value={formData.title}
                                         onChange={(e) =>
                                             setFormData((prev) => ({
@@ -247,9 +249,9 @@ const PostManage = () => {
                                     />
                                 </FormCommon>
 
-                                <FormCommon title="Salary range">
+                                <FormCommon title="Phạm vi lương">
                                     <Input
-                                        placeholder="salary range...."
+                                        placeholder="Phạm vi lương...."
                                         value={formData.salary_range}
                                         onChange={(e) =>
                                             setFormData((prev) => ({
@@ -260,9 +262,9 @@ const PostManage = () => {
                                     />
                                 </FormCommon>
 
-                                <FormCommon title="Location">
+                                <FormCommon title="Địa chỉ">
                                     <Input
-                                        placeholder="salary range...."
+                                        placeholder="Địa chỉ...."
                                         value={formData.location}
                                         onChange={(e) =>
                                             setFormData((prev) => ({
@@ -273,9 +275,9 @@ const PostManage = () => {
                                     />
                                 </FormCommon>
 
-                                <FormCommon title="Skill">
+                                <FormCommon title="Kỹ năng">
                                     <Input
-                                        placeholder="skill...."
+                                        placeholder="Kỹ năng...."
                                         value={formData.required_skills}
                                         onChange={(e) =>
                                             setFormData((prev) => ({
@@ -286,7 +288,7 @@ const PostManage = () => {
                                     />
                                 </FormCommon>
 
-                                <FormCommon title="Category">
+                                <FormCommon title="DAnh mục">
                                     <Select
                                         value={formData.category_id}
                                         onChange={(e) =>
@@ -297,26 +299,26 @@ const PostManage = () => {
                                                 ),
                                             }))
                                         }
-                                        placeholder="Choose category"
+                                        placeholder="Chọn danh mục"
                                     >
                                         {cateData?.data?.length
                                             ? (cateData?.data || []).map(
-                                                (item) => {
-                                                    return (
-                                                        <option
-                                                            value={item.id}
-                                                            key={item.id}
-                                                        >
-                                                            {item.name}
-                                                        </option>
-                                                    );
-                                                }
-                                            )
+                                                  (item) => {
+                                                      return (
+                                                          <option
+                                                              value={item.id}
+                                                              key={item.id}
+                                                          >
+                                                              {item.name}
+                                                          </option>
+                                                      );
+                                                  }
+                                              )
                                             : null}
                                     </Select>
                                 </FormCommon>
 
-                                <FormCommon title="Status">
+                                <FormCommon title="Trạng thái">
                                     <Select
                                         defaultValue="active"
                                         value={formData.status}
@@ -333,9 +335,9 @@ const PostManage = () => {
                                 </FormCommon>
 
                                 <GridItem colSpan={2}>
-                                    <FormCommon title="content">
+                                    <FormCommon title="nội dung">
                                         <MdEditor
-                                            placeholder="Write description job post...."
+                                            placeholder="nội dung...."
                                             style={{ height: "500px" }}
                                             renderHTML={(text) =>
                                                 mdParser.render(text)
@@ -377,7 +379,7 @@ const PostManage = () => {
                 </Modal>
 
                 <ConfirmDelete
-                    header="Confirm xóa User"
+                    header="Confirm xóa tin tuyển dụng"
                     title="Bạn chắc chắn muốn xóa?, hành động này không thể khôi phục."
                     isOpen={isOpenDelete}
                     onOpen={onOpenDelete}

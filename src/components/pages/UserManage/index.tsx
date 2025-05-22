@@ -195,12 +195,12 @@ const UserManage = () => {
                 </HStack>
                 <TableCommon
                     columns={[
-                        { key: "full_name", label: "Name", w: "20%" },
+                        { key: "full_name", label: "Tên", w: "20%" },
                         { key: "email", label: "Email", w: "20%" },
-                        { key: "phone", label: "Phone", w: "20%" },
+                        { key: "phone", label: "Số điẹn thoại", w: "20%" },
                         {
                             key: "gender",
-                            label: "Gender",
+                            label: "Giới tính",
                             w: "20%",
                         },
                         {
@@ -219,7 +219,7 @@ const UserManage = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-                                <FormCommon title="Name">
+                                <FormCommon title="Tên">
                                     {isAdmin ? (
                                         <Input
                                             value={dataUpdate?.full_name}
@@ -265,7 +265,7 @@ const UserManage = () => {
                                         />
                                     )}
                                 </FormCommon>
-                                <FormCommon title="Phone">
+                                <FormCommon title="Số điện thoại">
                                     {isAdmin ? (
                                         <Input
                                             value={dataUpdate?.phone}
@@ -369,7 +369,7 @@ const UserManage = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-                                <FormCommon title="Name">
+                                <FormCommon title="Tên">
                                     <Input
                                         value={newUser.name}
                                         onChange={(e) => {
@@ -391,7 +391,7 @@ const UserManage = () => {
                                         }}
                                     />
                                 </FormCommon>
-                                <FormCommon title="Password">
+                                <FormCommon title="Mật khẩu">
                                     <Input
                                         value={newUser.password}
                                         onChange={(e) => {
@@ -402,7 +402,7 @@ const UserManage = () => {
                                         }}
                                     />
                                 </FormCommon>
-                                <FormCommon title="Confirm Password">
+                                <FormCommon title="xác nhận mật khẩu">
                                     <Input
                                         value={newUser.confirmPassword}
                                         onChange={(e) => {
@@ -428,7 +428,7 @@ const UserManage = () => {
                 </Modal>
 
                 <ConfirmDelete
-                    header="Confirm xóa User"
+                    header="Xác nhận xóa User"
                     title="Bạn chắc chắn muốn xóa?, hành động này không thể khôi phục."
                     isOpen={isOpenDelete}
                     onOpen={onOpenDelete}

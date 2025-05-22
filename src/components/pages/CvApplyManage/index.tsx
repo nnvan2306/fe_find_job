@@ -95,8 +95,8 @@ const CvApplyManage = () => {
                 <TitleManage title="Quản lý Cv ứng tuyển" />
                 <TableCommon
                     columns={[
-                        { key: "title", label: "Title" },
-                        { key: "nature", label: "Compatible" },
+                        { key: "title", label: "Tiêu đề" },
+                        { key: "nature", label: "Tương thích" },
                         { key: "cv", label: "CV" },
                         { key: "action", label: "" },
                     ]}
