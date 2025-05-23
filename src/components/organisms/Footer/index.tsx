@@ -259,7 +259,7 @@ const Footer = () => {
                     fontSize="sm"
                 >
                     <Flex align="center" gap={1}>
-                        <Text>© 2024 Your Company. Made with</Text>
+                        <Text>© 2025 Your Company. Made with</Text>
                         <Box as={FaHeart} color="red.400" />
                         <Text>in Vietnam</Text>
                     </Flex>

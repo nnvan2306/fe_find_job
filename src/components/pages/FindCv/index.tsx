@@ -188,10 +188,12 @@ const FindCv = () => {
                         </Box>
                     )}
                 </Stack>
-                <Pagination
-                    currentPage={data?.pagination?.currentPage || 1}
-                    totalPage={data?.pagination?.totalPages || 10}
-                />
+                {data?.data?.length ? (
+                    <Pagination
+                        currentPage={data?.pagination?.currentPage || 1}
+                        totalPage={data?.pagination?.totalPages || 10}
+                    />
+                ) : null}
             </Container>
         </MainTemPlate>
     );

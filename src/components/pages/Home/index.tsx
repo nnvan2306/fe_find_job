@@ -188,20 +188,32 @@ const Home = () => {
                             </Box>
 
                             <Box>
-                                {jobData?.data?.length
-                                    ? (jobData?.data || []).map((job) => (
-                                          <JobCard key={job.id} job={job} />
-                                      ))
-                                    : null}
+                                {jobData?.data?.length ? (
+                                    (jobData?.data || []).map((job) => (
+                                        <JobCard key={job.id} job={job} />
+                                    ))
+                                ) : (
+                                    <Box textAlign="center" py={10}>
+                                        <Text fontSize="lg">
+                                            Không tìm thấy Công việc nào phù hợp
+                                            với tiêu chí của bạn
+                                        </Text>
+                                        <Text color="gray.500">
+                                            {t("findCv.subMes")}
+                                        </Text>
+                                    </Box>
+                                )}
                             </Box>
-                            <Pagination
-                                currentPage={
-                                    jobData?.pagination?.currentPage || 1
-                                }
-                                totalPage={
-                                    jobData?.pagination?.totalPages || 10
-                                }
-                            />
+                            {jobData?.data?.length ? (
+                                <Pagination
+                                    currentPage={
+                                        jobData?.pagination?.currentPage || 1
+                                    }
+                                    totalPage={
+                                        jobData?.pagination?.totalPages || 10
+                                    }
+                                />
+                            ) : null}
                         </Box>
                     </Flex>
                 </Container>

@@ -197,25 +197,38 @@ const Companies: React.FC = () => {
                         {t("companies.label")}
                     </Heading>
 
-                    <SimpleGrid
-                        columns={{ base: 1, md: 2, lg: 3 }}
-                        spacing={10}
-                    >
-                        {data?.data?.length
-                            ? (data?.data).map((company) => {
-                                  return (
-                                      <CompanyCard
-                                          key={company.id}
-                                          company={company}
-                                      />
-                                  );
-                              })
-                            : null}
-                    </SimpleGrid>
-                    <Pagination
-                        currentPage={data?.pagination?.currentPage || 1}
-                        totalPage={data?.pagination?.totalPages || 10}
-                    />
+                    {data?.data?.length ? (
+                        <SimpleGrid
+                            columns={{ base: 1, md: 2, lg: 3 }}
+                            spacing={10}
+                        >
+                            {(data?.data || []).map((company) => {
+                                return (
+                                    <CompanyCard
+                                        key={company.id}
+                                        company={company}
+                                    />
+                                );
+                            })}
+                        </SimpleGrid>
+                    ) : (
+                        <Box textAlign="center" py={10}>
+                            <Text fontSize="lg">
+                                Không tìm thấy Công ty nào phù hợp với tiêu chí
+                                của bạn
+                            </Text>
+                            <Text color="gray.500">
+                                Thử điều chỉnh tìm kiếm của bạn
+                            </Text>
+                        </Box>
+                    )}
+
+                    {data?.data?.length ? (
+                        <Pagination
+                            currentPage={data?.pagination?.currentPage || 1}
+                            totalPage={data?.pagination?.totalPages || 10}
+                        />
+                    ) : null}
                 </Container>
             </Box>
         </MainTemPlate>
