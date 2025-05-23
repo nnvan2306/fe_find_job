@@ -9,6 +9,8 @@ type Payload = {
     company_id?: number;
     recruiter_id?: number;
     isUnActive?: boolean;
+    page?: number;
+    pageSize?: number;
 };
 
 const buildQuery = (params?: Payload): string => {
@@ -19,6 +21,8 @@ const buildQuery = (params?: Payload): string => {
         query.append("company_id", params.company_id.toString());
     if (params?.recruiter_id)
         query.append("recruiter_id", params.recruiter_id.toString());
+    if (params?.page) query.append("page", params.page.toString());
+    if (params?.pageSize) query.append("pageSize", params.pageSize.toString());
 
     const queryString = query.toString();
     return queryString ? `/applications?${queryString}` : "/applications";

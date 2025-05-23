@@ -78,7 +78,12 @@ const JobCard: React.FC<{ job: JobData }> = ({ job }) => {
                                     />
                                 )}
                             </Heading>
-                            <Text color="green.500" fontWeight="bold">
+                            <Text
+                                color="green.500"
+                                fontWeight="bold"
+                                minWidth={"140px"}
+                                textAlign="end"
+                            >
                                 {job.salary_range}
                             </Text>
                         </Flex>

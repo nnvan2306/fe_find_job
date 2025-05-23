@@ -11,8 +11,19 @@ import ActionManage from "../../molecules/ActionMAnage";
 import ConfirmDelete from "../../organisms/ConfirmDelete";
 import TableCommon from "../../organisms/TableCommon";
 import ManagerTemplate from "../../templates/ManagerTemplate";
+import { useSearchParams } from "react-router-dom";
+import Pagination from "../../molecules/Pagination";
 
 const CvApplyManage = () => {
+    const [searchParams] = useSearchParams();
+    const page = useMemo(
+        () => Number(searchParams.get("page")) || 1,
+        [searchParams]
+    );
+    const pageSize = useMemo(
+        () => Number(searchParams.get("pageSize")) || 10,
+        [searchParams]
+    );
     const user = useAppSelector((state) => state.user);
     const [idDelete, setIdDelete] = useState(0);
     const {
@@ -34,7 +45,11 @@ const CvApplyManage = () => {
         }
     }, [user]);
     const { data: applyData, refetch } = useGetApplies({
-        nest: query,
+        nest: {
+            ...query,
+            page: page,
+            pageSize: pageSize,
+        },
     });
     const applies = useMemo(
         () =>
@@ -101,6 +116,10 @@ const CvApplyManage = () => {
                         { key: "action", label: "" },
                     ]}
                     data={applies}
+                />
+                <Pagination
+                    currentPage={applyData?.pagination?.currentPage || 1}
+                    totalPage={applyData?.pagination?.totalPages || 10}
                 />
 
                 <ConfirmDelete

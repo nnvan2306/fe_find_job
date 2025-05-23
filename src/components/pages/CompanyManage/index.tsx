@@ -1,4 +1,4 @@
-import { Box, HStack, Select, useDisclosure } from "@chakra-ui/react";
+import { Box, HStack, Select, Text, useDisclosure } from "@chakra-ui/react";
 import ManagerTemplate from "../../templates/ManagerTemplate";
 import TitleManage from "../../atoms/TitleManage";
 import TableCommon from "../../organisms/TableCommon";
@@ -58,6 +58,7 @@ const CompanyManage = () => {
         return (data?.data || []).map((item) => {
             return {
                 ...item,
+                website: <Text>{item?.website || ""}</Text>,
                 update: (
                     <HStack justifyContent="center">
                         <Select

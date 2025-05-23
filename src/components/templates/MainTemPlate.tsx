@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import Header from "../organisms/Header";
+import Footer from "../organisms/Footer";
 
 type Props = { children: React.ReactNode };
 const MainTemPlate = ({ children }: Props) => {
@@ -10,6 +11,7 @@ const MainTemPlate = ({ children }: Props) => {
             <Flex minH="100%" w={"100%"}>
                 {children}
             </Flex>
+            <Footer />
         </Box>
     );
 };
